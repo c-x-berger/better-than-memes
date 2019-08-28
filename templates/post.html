@@ -1,0 +1,10 @@
+{% extends "blank.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+    <h1>{{ title }}</h1>
+    <div class="post-content">
+        {% markdown %}
+            {{ content|safe }}
+        {% endmarkdown %}
+    </div>
+{% endblock %}

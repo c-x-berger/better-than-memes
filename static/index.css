@@ -1,0 +1,14 @@
+body {
+    font-family: sans-serif;
+}
+
+.post-content {
+    border: 2px solid black;
+    border-radius: 6px;
+    padding: 5px 10px;
+    max-width: 60em;
+}
+
+.post-content p {
+    margin: 0 auto; /* shh */
+}
