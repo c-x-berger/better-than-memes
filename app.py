@@ -13,8 +13,9 @@ with open("interim-posts.json") as f:
 
 
 @app.route("/")
-def hello_world():
-    return flask.render_template("blank.html")
+def front_page():
+    newest = sorted(posts.items(), key=lambda x: x[1]["timestamp"])[:10]
+    return flask.render_template("front_page.html", pageposts=newest)
 
 
 @app.route("/post/")

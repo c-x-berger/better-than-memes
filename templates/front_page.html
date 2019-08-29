@@ -1,0 +1,11 @@
+{% extends "blank.html" %}
+{% block title %}better than memes{% endblock %}
+{% block body %}
+    {% for post in pageposts %}
+        {% set post_data = post[1] %}
+        <h3 class="post-title">{{ post_data["title"] }}</h3>
+        <div class="post-info">
+            posted by {{ post_data["author"] }} at <span class="date-unformatted">{{ post_data["timestamp"] }}</span>
+        </div>
+    {% endfor %}
+{% endblock %}
