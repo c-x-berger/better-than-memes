@@ -2,7 +2,7 @@
 {% block title %}better than memes{% endblock %}
 {% block body %}
     {% for post in pageposts %}
-        {% set post_data = post[1] %}
+        {% set post_data = post[0] %}
         <h3 class="post-title"><a href="/post/{{ post[1] }}">{{ post_data["title"] }}</a></h3>
         <div class="post-info">
             posted by {{ post_data["author"] }} at <span class="date-unformatted">{{ post_data["timestamp"] }}</span>
