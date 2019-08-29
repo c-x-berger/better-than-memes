@@ -18,15 +18,15 @@ def hello_world():
 
 
 @app.route("/post/")
-@app.route("/post/<id>")
-def get_post(id: str = None):
-    if id is None:
+@app.route("/post/<id_>")
+def get_post(id_: str = None):
+    if id_ is None:
         return flask.redirect("/", code=302)
     try:
-        loaded = posts[id]
+        loaded = posts[id_]
     except KeyError:
         return flask.Response(status=404)
-    pos = post.Post(**loaded)
+    pos = post.Post.deserialize(loaded)
     return flask.render_template("post.html", title=pos.title, content=pos.content)
 
 

@@ -2,8 +2,10 @@ import hashlib
 import json
 import time
 
+from things import Thing
 
-class Post:
+
+class Post(Thing):
     author: str = None
     timestamp: float = None
     content = ""
@@ -20,14 +22,6 @@ class Post:
         )
 
     @property
-    def id(self):
-        return hashlib.sha256(self.serialized.encode("utf-8")).hexdigest()
-
-    @property
-    def short_id(self):
-        return self.id[:7]
-
-    @property
     def serialized(self):
         return json.dumps(
             {
@@ -39,5 +33,5 @@ class Post:
         )
 
     @staticmethod
-    def deserialize(serial: str):
-        return Post(**json.loads(serial))
+    def deserialize(serialized: dict):
+        return Post(**serialized)
