@@ -1,7 +1,7 @@
 {% extends "blank.html" %}
 {% block title %}{{ title }}{% endblock %}
 {% block body %}
-    <h1>{{ title }}</h1>
+    <h1 class="post-title">{{ title }}</h1>
     <div class="post-content">
         {% markdown %}
             {{ content|safe }}
