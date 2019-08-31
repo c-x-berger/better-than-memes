@@ -8,6 +8,7 @@ from storage import JSONThingStorage
 app = Flask(__name__)
 app.jinja_env.add_extension(MarkdownExtension)
 post_storage = JSONThingStorage("interim-posts.json")
+comments_storage = JSONThingStorage("interim-comments.json")
 
 
 @app.route("/")

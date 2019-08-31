@@ -1,0 +1,26 @@
+{
+  "4146155": {
+    "author": "magus",
+    "timestamp": 1567223710.1041036,
+    "content": "dank",
+    "children": [
+      "fcc2a62",
+      "2d62eda"
+    ],
+    "parent": "653c8d8"
+  },
+  "fcc2a62": {
+    "author": "merlin",
+    "timestamp": 1567223710.1041036,
+    "content": "memes",
+    "children": [],
+    "parent": "4146155"
+  },
+  "2d62eda": {
+    "author": "arthur",
+    "timestamp": 1567223710.1041036,
+    "content": "magus stinks",
+    "children": [],
+    "parent": "4146155"
+  }
+}
