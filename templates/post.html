@@ -2,22 +2,24 @@
 {% block title %}{{ title }}{% endblock %}
 {% block body %}
     <h1 class="post-title">{{ title }}</h1>
-    <div class="post-content">
-        {% markdown %}
-            {{ content }}
-        {% endmarkdown %}
-    </div>
+    {% if content %}
+        <div class="post-content">
+            {% markdown %}
+                {{ content }}
+            {% endmarkdown %}
+        </div>
+    {% endif %}
     <div class="comments">
         <ul>
             {% for item in comments recursive %}
-            <li class="comment">
-                {% markdown %}{{ item.content }}{% endmarkdown %}
-                {% if children_of(item) %}
-                    <ul class="child-comments">
-                        {{ loop(children_of(item)) }}
-                    </ul>
-                {% endif %}
-            </li>
+                <li class="comment">
+                    {% markdown %}{{ item.content }}{% endmarkdown %}
+                    {% if children_of(item) %}
+                        <ul class="child-comments">
+                            {{ loop(children_of(item)) }}
+                        </ul>
+                    {% endif %}
+                </li>
             {% endfor %}
         </ul>
     </div>
