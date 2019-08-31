@@ -2,7 +2,7 @@ import flask
 from flask import Flask
 from jinja2_markdown import MarkdownExtension
 
-import post
+import user_content
 from storage import JSONThingStorage
 
 app = Flask(__name__)
