@@ -4,14 +4,14 @@ import json
 
 
 class Thing(abc.ABC):
-    @property
-    def id(self):
-        j = json.dumps(self.serialize())
-        return hashlib.sha256(j.encode("utf-8")).hexdigest()
+    _id: str
 
     @property
-    def short_id(self):
-        return self.id[:7]
+    def id(self):
+        if not self._id:
+            j = json.dumps(self.serialize())
+            self._id = hashlib.sha256(j.encode("utf-8")).hexdigest()[:7]
+        return self._id
 
     @abc.abstractmethod
     def serialize(self) -> dict:
@@ -25,9 +25,10 @@ class Thing(abc.ABC):
 
     @staticmethod
     @abc.abstractmethod
-    def deserialize(serialized: dict):
+    def deserialize(serialized: dict, original_id: str):
         """
-        Reconstitute a Thing from its dictionary form.
+        Reconstitute a Thing from its dictionary form and ID calculated at creation.
+        :param original_id: The Thing's ID, as calculated prior to any editing
         :param serialized: The serialized Thing
         :return: A deserialized Thing
         """

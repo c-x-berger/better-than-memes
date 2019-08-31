@@ -25,7 +25,7 @@ def get_post(id_: str = None):
         loaded = post_storage[id_]
     except KeyError:
         return flask.Response(status=404)
-    pos = post.Post.deserialize(loaded)
+    pos = user_content.Post.deserialize(loaded, id_)
     return flask.render_template("post.html", title=pos.title, content=pos.content)
 
 
