@@ -7,4 +7,18 @@
             {{ content }}
         {% endmarkdown %}
     </div>
+    <div class="comments">
+        <ul>
+            {% for item in comments recursive %}
+            <li class="comment">
+                {% markdown %}{{ item.content }}{% endmarkdown %}
+                {% if children_of(item) %}
+                    <ul class="child-comments">
+                        {{ loop(children_of(item)) }}
+                    </ul>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

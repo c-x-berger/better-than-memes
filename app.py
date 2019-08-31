@@ -27,7 +27,27 @@ def get_post(id_: str = None):
     except KeyError:
         return flask.Response(status=404)
     pos = user_content.Post.deserialize(loaded, id_)
-    return flask.render_template("post.html", title=pos.title, content=pos.content)
+    # load comments from storage
+    comments = [
+        user_content.Comment.deserialize(v, k)
+        for k, v in comments_storage.items()
+        if v["parent"] == pos.id
+    ]
+    return flask.render_template(
+        "post.html",
+        title=pos.title,
+        content=pos.content,
+        comments=comments,
+        children_of=comment_children,
+    )
+
+
+def comment_children(c: user_content.Comment):
+    return [
+        user_content.Comment.deserialize(v, k)
+        for k, v in comments_storage.items()
+        if k in c.children()
+    ]
 
 
 if __name__ == "__main__":

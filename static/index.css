@@ -1,5 +1,6 @@
 body {
     font-family: sans-serif;
+    max-width: 60em;
 }
 
 .post-title {
@@ -15,4 +16,20 @@ body {
 
 .post-content p {
     margin: 0 auto; /* shh */
+}
+
+.comment {
+    border: 1px solid dimgrey;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 4px 0;
+}
+
+.comment p {
+    margin: 0;
+}
+
+.comments ul {
+    padding-left: 0;
+    list-style: none;
 }
