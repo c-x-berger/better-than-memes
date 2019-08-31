@@ -6,8 +6,15 @@ from things import Thing
 
 
 class UserContent(Thing, ABC):
-    def __init__(self, author: str, content: str, timestamp: float = time.time(), id_=None):
-        self.author, self.content, self.timestamp, self._id = author, content, timestamp, id_
+    def __init__(
+        self, author: str, content: str, timestamp: float = time.time(), id_=None
+    ):
+        self.author, self.content, self.timestamp, self._id = (
+            author,
+            content,
+            timestamp,
+            id_,
+        )
 
     def serialize(self) -> dict:
         return {
@@ -19,7 +26,12 @@ class UserContent(Thing, ABC):
 
 class Post(UserContent):
     def __init__(
-        self, author: str, title: str, content: str = "", timestamp: float = time.time(), id_=None
+        self,
+        author: str,
+        title: str,
+        content: str = "",
+        timestamp: float = time.time(),
+        id_=None,
     ):
         super().__init__(author, content, timestamp, id_)
         self.title = title
@@ -42,7 +54,7 @@ class Comment(UserContent):
         parent: str,
         children=None,
         timestamp: float = time.time(),
-        id_=None
+        id_=None,
     ):
         super().__init__(author, content, timestamp, id_)
         self.parent = parent
