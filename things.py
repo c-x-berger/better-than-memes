@@ -6,16 +6,15 @@ import json
 class Thing(abc.ABC):
     @property
     def id(self):
-        j = json.dumps(self.serialized)
+        j = json.dumps(self.serialize())
         return hashlib.sha256(j.encode("utf-8")).hexdigest()
 
     @property
     def short_id(self):
         return self.id[:7]
 
-    @property
     @abc.abstractmethod
-    def serialized(self):
+    def serialize(self) -> dict:
         """
         Serialize this Thing as a dictionary. Should be suitable for JSON dumping.
         Update your parent class' serialize method as opposed to overloading to avoid Boilerplate(tm).

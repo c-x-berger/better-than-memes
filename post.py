@@ -1,4 +1,3 @@
-import json
 import time
 
 from things import Thing
@@ -20,16 +19,13 @@ class Post(Thing):
             timestamp,
         )
 
-    @property
-    def serialized(self):
-        return json.dumps(
-            {
-                "author": self.author,
-                "timestamp": self.timestamp,
-                "content": self.content,
-                "title": self.title,
-            }
-        )
+    def serialize(self) -> dict:
+        return {
+            "author": self.author,
+            "timestamp": self.timestamp,
+            "content": self.content,
+            "title": self.title,
+        }
 
     @staticmethod
     def deserialize(serialized: dict):
