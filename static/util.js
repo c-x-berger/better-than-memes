@@ -12,8 +12,7 @@ function pretty_date_element(date_element) {
 }
 
 function pretty_page() {
-    let x = document.getElementsByClassName("date-unformatted");
-    [].forEach.call(x, pretty_date_element);
+    Array.from(document.getElementsByClassName("date-unformatted")).forEach(pretty_date_element);
 }
 
 window.onload = pretty_page;
