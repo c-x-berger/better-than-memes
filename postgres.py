@@ -2,9 +2,11 @@ import collections
 from abc import ABC
 from typing import Optional
 
+import asyncpg
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
+import config
 from storage import ThingStorage
 from things import Thing
 
@@ -42,3 +44,15 @@ class PostgresStorage(ThingStorage, ABC):
                 ", ".join(serialized.keys()), ", ".join(["%s"] * len(serialized))
             )
             curs.execute(exec_str, (self.table, *serialized.values()))
+
+
+pool = asyncpg.create_pool(
+    dsn="postgres://{user}:{pass}@{host}:{port}/{database}".format(
+        **config.POSTGRES_CONFIG
+    )
+)
+
+
+async def get_post(id_: str):
+    async with pool.acquire() as con:
+        return await con.fetchrow("SELECT * FROM posts WHERE id = $1", id_)
