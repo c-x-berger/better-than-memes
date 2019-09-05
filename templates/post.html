@@ -4,16 +4,14 @@
     <h1 class="post-title">{{ title }}</h1>
     {% if content %}
         <div class="post-content">
-            {% markdown %}
-                {{ content }}
-            {% endmarkdown %}
+            {{ md(content)|safe }}
         </div>
     {% endif %}
     <div class="comments">
         <ul>
             {% for item in comments recursive %}
                 <li class="comment">
-                    {% markdown %}{{ item.content }}{% endmarkdown %}
+                    {{ md(item.content)|safe }}
                     {% if children_of(item) %}
                         <ul class="child-comments">
                             {{ loop(children_of(item)) }}
