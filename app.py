@@ -6,6 +6,7 @@ import user_content
 from storage import JSONThingStorage
 
 app = Quart(__name__)
+app.jinja_env.globals.update(md=markdown.markdown)
 post_storage = JSONThingStorage("interim-posts.json")
 comments_storage = JSONThingStorage("interim-comments.json")
 
@@ -38,7 +39,6 @@ async def get_post(id_: str = None):
         content=pos.content,
         comments=comments,
         children_of=comment_children,
-        md=markdown.markdown
     )
 
 
