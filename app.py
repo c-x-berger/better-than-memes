@@ -3,7 +3,7 @@ import quart
 from quart import Quart
 
 import postgres
-from blueprints.PostBlueprint import post_blueprint
+from blueprints.post import post_blueprint
 from storage import JSONThingStorage
 
 app = Quart(__name__)
