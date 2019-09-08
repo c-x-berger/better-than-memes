@@ -2,7 +2,8 @@ import markdown
 import quart
 from quart import Quart
 
-import user_content
+import postgres
+from blueprints.PostBlueprint import post_blueprint
 from storage import JSONThingStorage
 
 app = Quart(__name__)
@@ -17,38 +18,12 @@ async def front_page():
     return await quart.render_template("front_page.html", pageposts=newest)
 
 
-@app.route("/post/")
-@app.route("/post/<id_>")
-async def get_post(id_: str = None):
-    if id_ is None:
-        return quart.redirect("/")
-    try:
-        loaded = post_storage[id_]
-    except KeyError:
-        return quart.Response("404", status=404)
-    pos = user_content.Post.deserialize(loaded, id_)
-    # load comments from storage
-    comments = [
-        user_content.Comment.deserialize(v, k)
-        for k, v in comments_storage.items()
-        if v["parent"] == pos.id
-    ]
-    return await quart.render_template(
-        "post.html",
-        title=pos.title,
-        content=pos.content,
-        comments=comments,
-        children_of=comment_children,
-    )
+@app.before_first_request
+async def init():
+    await postgres.init_pool()
 
 
-def comment_children(c: user_content.Comment):
-    return [
-        user_content.Comment.deserialize(v, k)
-        for k, v in comments_storage.items()
-        if k in c.children()
-    ]
-
+app.register_blueprint(post_blueprint, "/post/<post_id>")
 
 if __name__ == "__main__":
     app.run()

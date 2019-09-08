@@ -1,10 +1,10 @@
 {% extends "blank.html" %}
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ post["title"] }}{% endblock %}
 {% block body %}
-    <h1 class="post-title">{{ title }}</h1>
-    {% if content %}
+    <h1 class="post-title">{{ post["title"] }}</h1>
+    {% if post["content"] %}
         <div class="post-content">
-            {{ md(content)|safe }}
+            {{ md(post["content"])|safe }}
         </div>
     {% endif %}
     <div class="comments">
@@ -12,9 +12,9 @@
             {% for item in comments recursive %}
                 <li class="comment">
                     {{ md(item.content)|safe }}
-                    {% if children_of(item) %}
+                    {% if children_of(item["id"]) %}
                         <ul class="child-comments">
-                            {{ loop(children_of(item)) }}
+                            {{ loop(children_of(item["id"])) }}
                         </ul>
                     {% endif %}
                 </li>
