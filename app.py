@@ -5,7 +5,7 @@ import quart
 from quart import Quart
 
 import postgres
-from blueprints.post import post_blueprint
+from post.post import post_blueprint
 
 app = Quart(__name__)
 app.jinja_env.globals.update(md=markdown.markdown)
