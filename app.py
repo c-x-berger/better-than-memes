@@ -18,7 +18,7 @@ async def front_page():
     return await quart.render_template("front_page.html", pageposts=newest)
 
 
-@app.before_first_request
+@app.before_serving
 async def init():
     await postgres.init_pool()
 
