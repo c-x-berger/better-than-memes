@@ -5,6 +5,7 @@ import quart
 from quart import Quart
 
 import postgres
+from api_blueprint import api
 from post.post import post_blueprint
 
 app = Quart(__name__)
@@ -28,6 +29,7 @@ async def init():
 
 
 app.register_blueprint(post_blueprint, "/post/<post_id>")
+app.register_blueprint(api, "/api")
 
 if __name__ == "__main__":
     app.run()
