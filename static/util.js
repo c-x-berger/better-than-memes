@@ -1,7 +1,8 @@
 function unix_to_pretty(date) {
     let d = new Date(date * 1000);
-    const month = ("0" + (d.getMonth() + 1)).substr(-2);
-    const day = ("0" + d.getDate()).substr(-2);
+    let month = d.getMonth() + 1;
+    month = month < 10 ? "0" + month : month;
+    const day = d.getDate() < 10 ? "0" + d.getDate() : d.getDate();
     return d.getFullYear() + "-" + month + "-" + day;
 }
 

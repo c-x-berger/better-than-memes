@@ -1,54 +1,33 @@
-import flask
-from flask import Flask
-from jinja2_markdown import MarkdownExtension
+from datetime import timezone
 
-import user_content
-from storage import JSONThingStorage
+import markdown
+import quart
+from quart import Quart
 
-app = Flask(__name__)
-app.jinja_env.add_extension(MarkdownExtension)
-post_storage = JSONThingStorage("interim-posts.json")
-comments_storage = JSONThingStorage("interim-comments.json")
+import postgres
+from blueprints.post import post_blueprint
+
+app = Quart(__name__)
+app.jinja_env.globals.update(md=markdown.markdown)
+app.jinja_env.globals.update(
+    nix_time=lambda dt: dt.replace(tzinfo=timezone.utc).timestamp()
+)
 
 
 @app.route("/")
-def front_page():
-    newest = sorted(post_storage.items(), key=lambda x: x[1]["timestamp"])[:10]
-    return flask.render_template("front_page.html", pageposts=newest)
-
-
-@app.route("/post/")
-@app.route("/post/<id_>")
-def get_post(id_: str = None):
-    if id_ is None:
-        return flask.redirect("/", code=302)
-    try:
-        loaded = post_storage[id_]
-    except KeyError:
-        return flask.Response(status=404)
-    pos = user_content.Post.deserialize(loaded, id_)
-    # load comments from storage
-    comments = [
-        user_content.Comment.deserialize(v, k)
-        for k, v in comments_storage.items()
-        if v["parent"] == pos.id
-    ]
-    return flask.render_template(
-        "post.html",
-        title=pos.title,
-        content=pos.content,
-        comments=comments,
-        children_of=comment_children,
+async def front_page():
+    newest = await postgres.pool.fetch(
+        "SELECT * FROM posts ORDER BY timestamp LIMIT 10"
     )
+    return await quart.render_template("front_page.html", pageposts=newest)
 
 
-def comment_children(c: user_content.Comment):
-    return [
-        user_content.Comment.deserialize(v, k)
-        for k, v in comments_storage.items()
-        if k in c.children()
-    ]
+@app.before_serving
+async def init():
+    await postgres.init_pool()
 
+
+app.register_blueprint(post_blueprint, "/post/<post_id>")
 
 if __name__ == "__main__":
     app.run()
