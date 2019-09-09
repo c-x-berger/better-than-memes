@@ -1,20 +1,24 @@
+from datetime import timezone
+
 import markdown
 import quart
 from quart import Quart
 
 import postgres
 from blueprints.post import post_blueprint
-from storage import JSONThingStorage
 
 app = Quart(__name__)
 app.jinja_env.globals.update(md=markdown.markdown)
-post_storage = JSONThingStorage("interim-posts.json")
-comments_storage = JSONThingStorage("interim-comments.json")
+app.jinja_env.globals.update(
+    nix_time=lambda dt: dt.replace(tzinfo=timezone.utc).timestamp()
+)
 
 
 @app.route("/")
 async def front_page():
-    newest = sorted(post_storage.items(), key=lambda x: x[1]["timestamp"])[:10]
+    newest = await postgres.pool.fetch(
+        "SELECT * FROM posts ORDER BY timestamp LIMIT 10"
+    )
     return await quart.render_template("front_page.html", pageposts=newest)
 
 
