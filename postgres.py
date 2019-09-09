@@ -9,11 +9,10 @@ pool: Pool
 async def init_pool():
     global pool
     pool = await asyncpg.create_pool(
-        dsn="postgresql://{user}:{pass}@{host}:{port}/{database}".format(
+        dsn="postgres://{user}:{pass}@{host}:{port}/{database}".format(
             **config.POSTGRES_CONFIG
         )
     )
-    print("Connected!")
 
 
 async def get_post(id_: str):
