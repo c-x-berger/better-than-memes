@@ -29,6 +29,7 @@ async def init():
 
 
 app.register_blueprint(post_blueprint, "/post/<post_id>")
+# API MUST BE LAST
 app.register_blueprint(api, "/api")
 
 if __name__ == "__main__":

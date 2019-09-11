@@ -1,9 +1,10 @@
+from datetime import timezone
+
 import quart
-from quart import Blueprint
 
 import postgres
-
-post_blueprint = Blueprint("post", __name__)
+from api_blueprint import api
+from post import post_blueprint
 
 
 @post_blueprint.route("/")
@@ -17,12 +18,12 @@ async def main_view(post_id=None):
     )
 
 
-@post_blueprint.route("/api/content")
-async def contents(post_id=None):
-    conts = await postgres.pool.fetchrow(
-        "SELECT content FROM posts WHERE id = $1", post_id
-    )
-    return {"content": conts["content"]}
+@api.route("/post/<id_>")
+async def get_whole_post(id_: str):
+    post = await postgres.get_post(id_)
+    ret = {k: v for k, v in post.items()}
+    ret["timestamp"] = ret["timestamp"].replace(tzinfo=timezone.utc).timestamp()
+    return ret
 
 
 async def comment_children(parent: str):
