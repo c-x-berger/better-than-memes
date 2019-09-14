@@ -10,6 +10,8 @@ from . import blue
 
 @blue.route("/", ["GET", "POST"])
 async def login():
+    if flask_login.current_user.is_authenticated:
+        return quart.redirect("/")
     if request.method == "GET":
         return await quart.render_template("login/login.html")
     username = (await request.form)["username"]
