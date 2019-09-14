@@ -5,3 +5,4 @@ POSTGRES_CONFIG = {
     "port": 5432,
     "database": "bettermemes",
 }
+SECRET_KEY = "a very secret string"

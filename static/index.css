@@ -1,6 +1,13 @@
 body {
     font-family: sans-serif;
-    max-width: 60em;
+}
+
+fieldset {
+    max-width: max-content;
+}
+
+.greeting {
+    float: right;
 }
 
 .post-title {
@@ -11,7 +18,7 @@ body {
     border: 2px solid black;
     border-radius: 6px;
     padding: 5px 10px;
-    max-width: 60em;
+    max-width: 58.5em;
 }
 
 .post-content p {
@@ -27,6 +34,10 @@ body {
 
 .comment p {
     margin: 0;
+}
+
+.comments {
+    max-width: 60em;
 }
 
 .comments ul {

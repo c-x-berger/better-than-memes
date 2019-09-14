@@ -2,3 +2,4 @@ Quart
 asyncpg
 markdown
 flask-login
+flask-bcrypt

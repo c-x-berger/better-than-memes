@@ -11,6 +11,9 @@
     {% endblock %}
 </head>
 <body>
+{% if not current_user.is_anonymous %}
+    <div class="greeting">hi there, {{ current_user.id }}</div>
+{% endif %}
 {% block body %}{% endblock %}
 </body>
 </html>

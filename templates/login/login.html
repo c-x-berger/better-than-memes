@@ -1,12 +1,15 @@
 {% extends "blank.html" %}
 {% block title %}log in{% endblock %}
 {% block body %}
-    <form method="post" action="{{ url_for("login") }}">
+    <form method="post" action="{{ url_for(".login") }}">
         <fieldset>
             <legend>login</legend>
             username: <input name="username" required><br>
-            password: <input name="password" required><br>
+            password: <input name="password" type="password" required><br>
             <input type="submit" value="log in">
+            {% for message in get_flashed_messages() %}
+                {{ message|safe }}<br>
+            {% endfor %}
         </fieldset>
     </form>
 {% endblock %}
