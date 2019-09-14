@@ -13,6 +13,8 @@
 <body>
 {% if not current_user.is_anonymous %}
     <div class="greeting">hi there, {{ current_user.id }}</div>
+{% else %}
+    <div class="greeting"><a href="{{ url_for("login.login") }}">login</a></div>
 {% endif %}
 {% block body %}{% endblock %}
 </body>
