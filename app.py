@@ -34,7 +34,7 @@ async def init():
 
 
 app.register_blueprint(post_blueprint, "/post/<post_id>")
-app.register_blueprint(login.blue, "/login")
+app.register_blueprint(login.blue, "/")
 app.register_blueprint(api, "/api")
 
 if __name__ == "__main__":
