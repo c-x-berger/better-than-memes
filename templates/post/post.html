@@ -10,18 +10,5 @@
             {{ md(post["content"])|safe }}
         </div>
     {% endif %}
-    <div class="comments">
-        <ul>
-            {% for item in comments recursive %}
-                <li class="comment">
-                    {{ md(item.content)|safe }}
-                    {% if children_of(item["id"]) %}
-                        <ul class="child-comments">
-                            {{ loop(children_of(item["id"])) }}
-                        </ul>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% include "post/comment_section.html" %}
 {% endblock %}

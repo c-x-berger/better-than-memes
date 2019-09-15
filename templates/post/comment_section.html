@@ -1,0 +1,14 @@
+<div class="comments">
+    <ul>
+        {% for item in comments recursive %}
+            <li class="comment">
+                {{ md(item["content"])|safe }}
+                {% if item["children"] %}
+                    <ul class="child-comments">
+                        {{ loop(children_of(item)) }}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
