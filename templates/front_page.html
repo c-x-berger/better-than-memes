@@ -3,9 +3,8 @@
 {% block body %}
     {% for post in pageposts %}
         <h3 class="post-title"><a href="/post/{{ post["id"] }}">{{ post["title"] }}</a></h3>
-        <div class="post-info">
-            posted by {{ post["author"] }} at <span
-                class="date-unformatted">{{ nix_time(post["timestamp"]) }}</span>
-        </div>
+        <small class="post-author">
+            posted by {{ post["author"] }} at <span class="date-unformatted">{{ nix_time(post["timestamp"]) }}</span>
+        </small>
     {% endfor %}
 {% endblock %}

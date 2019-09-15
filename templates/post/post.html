@@ -1,7 +1,10 @@
 {% extends "blank.html" %}
 {% block title %}{{ post["title"] }}{% endblock %}
 {% block body %}
-    <h1 class="post-title">{{ post["title"] }}</h1>
+    <h2 class="post-title">{{ post["title"] }}</h2>
+    <small class="post-author">
+        posted by {{ post["author"] }} at <span class="date-unformatted">{{ nix_time(post["timestamp"]) }}</span>
+    </small>
     {% if post["content"] %}
         <div class="post-content">
             {{ md(post["content"])|safe }}
