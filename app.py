@@ -16,6 +16,8 @@ app.jinja_env.globals.update(md=markdown.markdown)
 app.jinja_env.globals.update(
     nix_time=lambda dt: dt.replace(tzinfo=timezone.utc).timestamp()
 )
+app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
 app.secret_key = config.SECRET_KEY
 login.login_man.init_app(app)
 

@@ -1,13 +1,38 @@
 body {
     font-family: sans-serif;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 fieldset {
     max-width: max-content;
 }
 
+.topbar {
+    padding: 2px 5px;
+    border-bottom: 2px solid gray;
+    background-color: #cccccc;
+    color: black;
+    text-decoration: none;
+}
+
+.topbar a {
+    color: black;
+}
+
 .greeting {
     float: right;
+}
+
+.main-content {
+    margin: 8px;
 }
 
 .post-title {
