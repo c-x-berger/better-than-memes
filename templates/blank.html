@@ -1,5 +1,8 @@
 <!-- If you're viewing this in a browser: the following HTML was automatically generated from -->
 <!-- at least two Jinja2 templates. It will be messy. Sorry. -->
+{% macro correct_date(date) %}
+    <span class="date-unformatted">{{ nix_time(date) }}</span>
+{% endmacro %}
 <!DOCTYPE html>
 <html>
 <head>

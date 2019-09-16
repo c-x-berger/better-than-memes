@@ -4,7 +4,7 @@
     {% for post in pageposts %}
         <h3 class="post-title"><a href="/post/{{ post["id"] }}">{{ post["title"] }}</a></h3>
         <small class="post-author">
-            posted by {{ post["author"] }} at <span class="date-unformatted">{{ nix_time(post["timestamp"]) }}</span>
+            posted by {{ post["author"] }} at {{ correct_date(post["timestamp"]) }}
         </small>
     {% endfor %}
 {% endblock %}

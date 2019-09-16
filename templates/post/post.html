@@ -3,7 +3,7 @@
 {% block body %}
     <h2 class="post-title">{{ post["title"] }}</h2>
     <small class="post-author">
-        posted by {{ post["author"] }} at <span class="date-unformatted">{{ nix_time(post["timestamp"]) }}</span>
+        posted by {{ post["author"] }} at {{ correct_date(post["timestamp"]) }}
     </small>
     {% if post["content"] %}
         <div class="post-content">
