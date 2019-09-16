@@ -1,0 +1,15 @@
+<div class="comments">
+    <ul>
+        {% for item in comments recursive %}
+            <li class="comment">
+                <small class="comment-author">{{ item["author"] }} at {{ correct_date(item["timestamp"]) }}</small>
+                {{ md(item["content"])|safe }}
+                {% if item["children"] %}
+                    <ul class="child-comments">
+                        {{ loop(children_of(item)) }}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
