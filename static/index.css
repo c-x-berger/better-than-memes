@@ -7,7 +7,7 @@ body {
     margin: 3px 0 0 0;
 }
 
-.post-author {
+.post-author, .comment-author {
     color: #888888;
 }
 
