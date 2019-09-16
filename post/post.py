@@ -18,7 +18,7 @@ async def main_view(post_id=None):
     )
 
 
-@api.route("/post/<id_>")
+@api.route("/post/<id_>/")
 async def get_whole_post(id_: str):
     post = await postgres.get_post(id_)
     ret = {k: v for k, v in post.items()}
