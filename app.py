@@ -8,6 +8,7 @@ from quart import Quart
 import config
 import login
 import postgres
+import user
 from api_blueprint import api
 from post.post import post_blueprint
 
@@ -37,6 +38,7 @@ async def init():
 
 app.register_blueprint(post_blueprint, "/post/<post_id>")
 app.register_blueprint(login.blue, "/")
+app.register_blueprint(user.blue, "/user/<user>")
 # API MUST BE LAST
 app.register_blueprint(api, "/api")
 
