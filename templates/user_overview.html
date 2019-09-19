@@ -1,0 +1,19 @@
+{% extends "blank.html" %}
+{% block title %}overview for {{ username }}{% endblock %}
+{% block body %}
+    this is the userpage for {{ username }}<br>
+    {{ username }} has made {{ posts }} post(s) and {{ comments }} comment(s)
+    {% for item in content %}
+        {% if item["type"] == "post" %}
+            {{ post_display(item["title"], item["id"], username, item["timestamp"]) }}
+        {% else %}
+            <div>
+                <small class="post-author">
+                    {{ username }} commented on
+                    <a href="{{ url_for("post.main_view", post_id=item["post"]) }}">{{ item["post_title"] }}</a><br>
+                </small>
+                {{ item["content"] }}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
