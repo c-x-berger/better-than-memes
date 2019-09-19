@@ -9,7 +9,7 @@
         {% else %}
             <div>
                 <small class="post-author">
-                    {{ username }} commented on
+                    {{ user(username) }} commented on
                     <a href="{{ url_for("post.main_view", post_id=item["post"]) }}">{{ item["post_title"] }}</a><br>
                 </small>
                 {{ item["content"] }}
