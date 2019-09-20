@@ -1,3 +1,5 @@
 from quart import Blueprint
 
-post_blueprint = Blueprint("post", __name__)
+blue = Blueprint("post", __name__)
+
+from . import post

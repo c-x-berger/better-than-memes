@@ -3,11 +3,11 @@ from datetime import timezone
 import quart
 
 import postgres
-from blueprints.api_blueprint import api
-from blueprints.post import post_blueprint
+from blueprints.api import blue
+from blueprints.post import blue
 
 
-@post_blueprint.route("/")
+@blue.route("/")
 async def main_view(post_id=None):
     post = await postgres.get_post(post_id)
     comments = await postgres.pool.fetch(
@@ -18,7 +18,7 @@ async def main_view(post_id=None):
     )
 
 
-@api.route("/post/<id_>/")
+@blue.route("/post/<id_>/")
 async def get_whole_post(id_: str):
     post = await postgres.get_post(id_)
     ret = {k: v for k, v in post.items()}

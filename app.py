@@ -7,9 +7,7 @@ from quart import Quart
 
 import config
 import postgres
-from blueprints import user, login
-from blueprints.api_blueprint import api
-from blueprints.post.post import post_blueprint
+from blueprints import user, login, post, api
 
 app = Quart(__name__)
 app.jinja_env.globals.update(md=markdown.markdown)
@@ -35,11 +33,11 @@ async def init():
     await postgres.init_pool()
 
 
-app.register_blueprint(post_blueprint, "/post/<post_id>")
+app.register_blueprint(post.blue, "/post/<post_id>")
 app.register_blueprint(login.blue, "/")
 app.register_blueprint(user.blue, "/user/<user>")
 # API MUST BE LAST
-app.register_blueprint(api, "/api")
+app.register_blueprint(api.blue, "/api")
 
 if __name__ == "__main__":
     app.run()
