@@ -4,7 +4,7 @@ import quart
 from quart import request
 
 import postgres
-from login.management import User
+from blueprints.login.management import User
 from . import blue
 
 

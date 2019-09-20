@@ -6,11 +6,10 @@ import quart.flask_patch
 from quart import Quart
 
 import config
-import login
 import postgres
-import user
-from api_blueprint import api
-from post.post import post_blueprint
+from blueprints import user, login
+from blueprints.api_blueprint import api
+from blueprints.post.post import post_blueprint
 
 app = Quart(__name__)
 app.jinja_env.globals.update(md=markdown.markdown)

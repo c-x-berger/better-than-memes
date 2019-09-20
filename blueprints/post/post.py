@@ -3,8 +3,8 @@ from datetime import timezone
 import quart
 
 import postgres
-from api_blueprint import api
-from post import post_blueprint
+from blueprints.api_blueprint import api
+from blueprints.post import post_blueprint
 
 
 @post_blueprint.route("/")

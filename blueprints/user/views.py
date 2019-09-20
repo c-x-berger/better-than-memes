@@ -1,7 +1,7 @@
 import quart
 
 import postgres
-from user import blue
+from blueprints.user import blue
 
 
 @blue.route("/")
