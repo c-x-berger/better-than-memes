@@ -2,9 +2,6 @@
 {% block title %}better than memes{% endblock %}
 {% block body %}
     {% for post in pageposts %}
-        <h3 class="post-title"><a href="/post/{{ post["id"] }}">{{ post["title"] }}</a></h3>
-        <small class="post-author">
-            posted by {{ post["author"] }} at {{ correct_date(post["timestamp"]) }}
-        </small>
+        {{ post_display(post["title"], post["id"], post["author"], post["timestamp"]) }}
     {% endfor %}
 {% endblock %}

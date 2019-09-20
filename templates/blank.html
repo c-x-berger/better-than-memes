@@ -1,7 +1,16 @@
 <!-- If you're viewing this in a browser: the following HTML was automatically generated from -->
 <!-- at least two Jinja2 templates. It will be messy. Sorry. -->
-{% macro correct_date(date) %}
-    <span class="date-unformatted">{{ nix_time(date) }}</span>
+{% macro correct_date(date) %}<span class="date-unformatted">{{ nix_time(date) }}</span>{% endmacro %}
+{% macro user(u) %}<a href="{{ url_for("user.user_overview", user=u) }}">{{ u }}</a>{% endmacro %}
+{% macro post_display(title, id, author, timestamp) %}
+    <div>
+        <h3 class="post-title">
+            <a href="{{ url_for("post.main_view", post_id=id) }}">{{ title }}</a>
+        </h3>
+        <small class="post-author">
+            posted by {{ user(author) }} at {{ correct_date(timestamp) }}
+        </small>
+    </div>
 {% endmacro %}
 <!DOCTYPE html>
 <html>
@@ -14,6 +23,18 @@
     {% endblock %}
 </head>
 <body>
-{% block body %}{% endblock %}
+<div class="topbar">
+    <a href="/">home</a>
+    {% if not current_user.is_anonymous %}
+        <span class="greeting">
+            hi there, {{ current_user.id }} | <a href="{{ url_for("login.logout") }}">logout</a>
+        </span>
+    {% else %}
+        <span class="greeting"><a href="{{ url_for("login.login") }}">login</a></span>
+    {% endif %}
+</div>
+<div class="main-content">
+    {% block body %}{% endblock %}
+</div>
 </body>
 </html>
