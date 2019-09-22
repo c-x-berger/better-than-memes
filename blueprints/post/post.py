@@ -1,13 +1,15 @@
 from datetime import timezone
 
+import flask_login
 import quart
+from quart import request
 
 import postgres
 from blueprints import api
 from blueprints.post import blue
 
 
-@blue.route("/")
+@blue.route("/<post_id>")
 async def main_view(post_id=None):
     post = await postgres.get_post(post_id)
     comments = await postgres.pool.fetch(
@@ -16,6 +18,16 @@ async def main_view(post_id=None):
     return await quart.render_template(
         "post/post.html", post=post, comments=comments, children_of=comment_children
     )
+
+
+@blue.route("/submit", ["GET", "POST"])
+@flask_login.login_required
+async def submit_page():
+    if request.method == "GET":
+        return "yare yare daze"
+
+    contents = (await request.form)["text"]
+    title = (await request.form)["title"]
 
 
 @api.blue.route("/post/<id_>/")

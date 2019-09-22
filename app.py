@@ -33,9 +33,9 @@ async def init():
     await postgres.init_pool()
 
 
-app.register_blueprint(post.blue, "/post/<post_id>")
+app.register_blueprint(post.blue, "/post")
 app.register_blueprint(login.blue, "/")
-app.register_blueprint(user.blue, "/user/<user>")
+app.register_blueprint(user.blue, "/user")
 # API MUST BE LAST
 app.register_blueprint(api.blue, "/api")
 
