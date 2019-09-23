@@ -4,8 +4,12 @@
     <form method="post" action="{{ url_for(".login") }}">
         <fieldset>
             <legend>login</legend>
-            username: <input name="username" required><br>
-            password: <input name="password" type="password" required><br>
+            <label>
+                username: <input name="username" required>
+            </label>
+            <label>
+                password: <input name="password" type="password" required>
+            </label>
             <input type="submit" value="log in">
             {% for message in get_flashed_messages() %}
                 {{ message|safe }}<br>

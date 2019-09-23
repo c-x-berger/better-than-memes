@@ -15,6 +15,10 @@ fieldset {
     max-width: max-content;
 }
 
+label {
+    display: block;
+}
+
 .topbar {
     padding: 2px 5px;
     border-bottom: 2px solid gray;
