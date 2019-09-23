@@ -8,16 +8,8 @@ from . import login_man
 
 
 class User(UserMixin):
-    def __init__(self, username: str, auth: bool = False):
+    def __init__(self, username: str):
         self.id = username
-        self._is_authenticated = auth
-
-    @property
-    def is_authenticated(self):
-        return self._is_authenticated
-
-    def set_auth(self, auth):
-        self._is_authenticated = auth
 
 
 @login_man.user_loader
@@ -42,9 +34,9 @@ def request_loader(req):
             "SELECT username, password FROM users WHERE username = $1", username
         )
     )
-    if not user:
+    if not user or not flask_bcrypt.check_password_hash(user["password"], password):
         return
-    u = User(username, flask_bcrypt.check_password_hash(user["password"], password))
+    u = User(username)
     return u
 
 

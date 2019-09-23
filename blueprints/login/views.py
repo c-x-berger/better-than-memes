@@ -23,7 +23,7 @@ async def login():
         if flask_bcrypt.check_password_hash(
             user_rec["password"], (await request.form)["password"]
         ):
-            flask_login.login_user(User(username, True))
+            flask_login.login_user(User(username))
             return quart.redirect("/")
         await quart.flash("bad password")
         return await quart.render_template("login/login.html"), 401
