@@ -29,16 +29,18 @@ class Post(UserContent):
         self,
         author: str,
         title: str,
+        board: str,
         content: str = "",
         timestamp: float = time.time(),
         id_=None,
     ):
         super().__init__(author, content, timestamp, id_)
         self.title = title
+        self.board = board
 
     def serialize(self) -> dict:
         values = super().serialize()
-        values.update({"title": self.title})
+        values.update({"title": self.title, "board": self.board})
         return values
 
     @staticmethod
