@@ -15,6 +15,8 @@ from user_content import Post
 @blue.route("/<post_id>")
 async def main_view(post_id=None):
     post = await postgres.get_post(post_id)
+    if post is None:
+        return "not found", 404
     comments = await postgres.pool.fetch(
         "SELECT * FROM comments WHERE parent = $1", post_id
     )
@@ -23,8 +25,8 @@ async def main_view(post_id=None):
     )
 
 
-@flask_login.login_required
 @blue.route("/submit", ["GET", "POST"])
+@flask_login.login_required
 async def submit_page():
     if request.method == "GET":
         return await quart.render_template("post/submit.html")
