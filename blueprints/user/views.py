@@ -50,7 +50,7 @@ async def user_overview(user: str = None):
         }
         for comment in comments
     ]
-    content = sorted(content, key=lambda k: k["timestamp"])[:25]
+    content = sorted(content, key=lambda k: k["timestamp"], reverse=True)[:25]
 
     return await quart.render_template(
         "user_overview.html",
