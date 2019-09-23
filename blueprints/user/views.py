@@ -8,7 +8,9 @@ from blueprints.user import blue
 @blue.route("/me")
 async def selfpage():
     if not flask_login.current_user.is_anonymous:
-        return quart.redirect(quart.url_for(".user_overview", user=flask_login.current_user.id))
+        return quart.redirect(
+            quart.url_for(".user_overview", user=flask_login.current_user.id)
+        )
     return quart.redirect(quart.url_for("login.login"))
 
 

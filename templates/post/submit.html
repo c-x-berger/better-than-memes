@@ -1,0 +1,24 @@
+{% extends "blank.html" %}
+{% block title %}submit post{% endblock %}
+{% block body %}
+    <form method="post" action="{{ url_for(".submit_page") }}">
+        <fieldset>
+            <legend>submit post</legend>
+            <label>
+                title:<br>
+                <input name="title" required><br>
+            </label>
+            <label>
+                content:<br>
+                <textarea name="text" id="text" cols="50" rows="5"></textarea><br>
+            </label>
+            <label>
+                board: <input name="board" required>
+            </label>
+            {% for message in get_flashed_messages() %}
+                {{ message|safe }}<br>
+            {% endfor %}
+            <input type="submit" value="submit post">
+        </fieldset>
+    </form>
+{% endblock %}

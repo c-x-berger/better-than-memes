@@ -1,12 +1,15 @@
+import datetime
 from datetime import timezone
 
 import flask_login
 import quart
+from asyncpg import UniqueViolationError, ForeignKeyViolationError
 from quart import request
 
 import postgres
 from blueprints import api
 from blueprints.post import blue
+from user_content import Post
 
 
 @blue.route("/<post_id>")
@@ -20,14 +23,46 @@ async def main_view(post_id=None):
     )
 
 
-@blue.route("/submit", ["GET", "POST"])
 @flask_login.login_required
+@blue.route("/submit", ["GET", "POST"])
 async def submit_page():
     if request.method == "GET":
-        return "yare yare daze"
+        return await quart.render_template("post/submit.html")
 
-    contents = (await request.form)["text"]
-    title = (await request.form)["title"]
+    try:
+        contents = (await request.form)["text"]
+    except KeyError:
+        contents = ""
+    try:
+        title = (await request.form)["title"]
+    except KeyError:
+        await quart.flash("no title")
+        return "aw shit, here we go again"
+    try:
+        board = (await request.form)["board"]
+    except KeyError:
+        await quart.flash("no board")
+        return "no board"
+    user = flask_login.current_user.id
+    p = Post(user, title, board, content=contents)
+    try:
+        await postgres.pool.execute(
+            "INSERT INTO posts(id, title, author, content, timestamp, board) VALUES ($1, $2, $3, $4, $5, $6)",
+            p.id,
+            p.title,
+            p.author,
+            p.content,
+            datetime.date.fromtimestamp(p.timestamp),
+            p.board,
+        )
+    except ForeignKeyViolationError:
+        await quart.flash("board {} does not exist".format(board))
+        return "yare yare daze (board DNE)"
+    except UniqueViolationError:
+        await quart.flash("bruh moment, yell at c-x-berger")
+        return "bruh moment, yell at c-x-berger"
+    else:
+        return quart.redirect(quart.url_for(".main_view", post_id=p.id))
 
 
 @api.blue.route("/post/<id_>/")
