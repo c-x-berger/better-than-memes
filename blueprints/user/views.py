@@ -17,8 +17,7 @@ async def selfpage():
 @blue.route("/<user>")
 async def user_overview(user: str = None):
     posts = await postgres.pool.fetch(
-        "SELECT id, author, title, timestamp FROM posts WHERE author = $1 ORDER BY timestamp DESC LIMIT 25",
-        user,
+        "SELECT * FROM posts WHERE author = $1 ORDER BY timestamp DESC LIMIT 25", user
     )
     post_count = len(posts)
     comments = await postgres.pool.fetch(
@@ -27,29 +26,22 @@ async def user_overview(user: str = None):
     )
     comment_count = len(comments)
 
-    content = [
-        {
-            "id": post["id"],
-            "title": post["title"],
-            "timestamp": post["timestamp"],
-            "type": "post",
-        }
-        for post in posts
-    ]
-    content += [
-        {
-            "content": comment["content"],
-            "timestamp": comment["timestamp"],
-            "post": comment["post"],
+    content = []
+    for post in posts:
+        p = {"type": "post"}
+        p.update(post)
+        content.append(p)
+    for comment in comments:
+        c = {
+            "type": "comment",
             "post_title": (
                 await postgres.pool.fetchrow(
                     "SELECT title FROM posts WHERE id = $1", comment["post"]
                 )
             )["title"],
-            "type": "comment",
         }
-        for comment in comments
-    ]
+        c.update(comment)
+        content.append(c)
     content = sorted(content, key=lambda k: k["timestamp"], reverse=True)[:25]
 
     return await quart.render_template(
