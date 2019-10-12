@@ -2,9 +2,7 @@
 {% block title %}{{ post["title"] }}{% endblock %}
 {% block body %}
     <h2 class="post-title">{{ post["title"] }}</h2>
-    <small class="post-author">
-        posted by {{ user(post["author"]) }} at {{ correct_date(post["timestamp"]) }}
-    </small>
+    {{ post_authorline(post) }}
     {% if post["content"] %}
         <div class="post-content">
             {{ md(post["content"])|safe }}

@@ -2,6 +2,6 @@
 {% block title %}better than memes{% endblock %}
 {% block body %}
     {% for post in pageposts %}
-        {{ post_display(post["title"], post["id"], post["author"], post["timestamp"]) }}
+        {{ post_display(post) }}
     {% endfor %}
 {% endblock %}
