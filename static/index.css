@@ -50,27 +50,27 @@ label {
 .post-content {
     border: 2px solid black;
     border-radius: 6px;
-    padding: 5px 10px;
-    max-width: 58.5em;
+    padding: 5px;
+    max-width: 50%;
 }
 
 .post-content p {
-    margin: 0 auto; /* shh */
-}
-
-.comment {
-    border: 1px solid dimgrey;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 4px 0;
-}
-
-.comment p {
     margin: 0;
 }
 
+.comment {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px 0;
+}
+
 .comments {
-    max-width: 60em;
+    max-width: 50%;
+}
+
+.comments p {
+    margin: 0;
 }
 
 .comments ul {
