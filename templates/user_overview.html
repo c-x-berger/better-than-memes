@@ -4,16 +4,16 @@
     this is the userpage for {{ username }}<br>
     {{ username }} has made {{ posts }} post(s) and {{ comments }} comment(s)
     {% for item in content %}
-        {% if item["type"] == "post" %}
-            {{ post_display(item) }}
-        {% else %}
-            <div>
+        <div class="userpage-item">
+            {% if item["type"] == "post" %}
+                {{ post_display(item) }}
+            {% else %}
                 <small class="comment-author">
                     {{ user(username) }} commented on
                     <a href="{{ url_for("post.main_view", post_id=item["post"]) }}">{{ item["post_title"] }}</a><br>
                 </small>
                 {{ item["content"] }}
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
     {% endfor %}
 {% endblock %}
