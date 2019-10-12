@@ -30,7 +30,7 @@
     <a href="/">home</a> - <a href="{{ url_for("post.submit_page") }}">submit post</a>
     {% if not current_user.is_anonymous %}
         <span class="greeting">
-            hi there, {{ current_user.id }} | <a href="{{ url_for("login.logout") }}">logout</a>
+            hi there, {{ user(current_user.id) }} | <a href="{{ url_for("login.logout") }}">logout</a>
         </span>
     {% else %}
         <span class="greeting"><a href="{{ url_for("login.login") }}">login</a></span>

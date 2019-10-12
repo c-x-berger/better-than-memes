@@ -5,10 +5,10 @@
     {{ username }} has made {{ posts }} post(s) and {{ comments }} comment(s)
     {% for item in content %}
         {% if item["type"] == "post" %}
-            {{ post_display(item["title"], item["id"], username, item["timestamp"]) }}
+            {{ post_display(item) }}
         {% else %}
             <div>
-                <small class="post-author">
+                <small class="comment-author">
                     {{ user(username) }} commented on
                     <a href="{{ url_for("post.main_view", post_id=item["post"]) }}">{{ item["post_title"] }}</a><br>
                 </small>
