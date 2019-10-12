@@ -77,3 +77,7 @@ label {
     padding-left: 0;
     list-style: none;
 }
+
+.userpage-item {
+    margin: 5px 0;
+}
