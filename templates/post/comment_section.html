@@ -8,7 +8,6 @@
                 <div class="markdown">
                     {{ md(item["content"])|safe }}
                 </div>
-                <small><strong>dummy text</strong></small>
                 {% if item["children"] %}
                     <ul class="child-comments">
                         {{ loop(children_of(item)) }}
