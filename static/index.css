@@ -15,6 +15,18 @@ fieldset {
     max-width: max-content;
 }
 
+pre {
+    background: gainsboro;
+    border: 1px solid #ddd; /* that's the name you should know! */
+    border-radius: 2px;
+    padding: 5px;
+}
+
+pre code {
+    padding: unset;
+    border: unset;
+}
+
 label {
     display: block;
     margin-bottom: 5px;
