@@ -5,7 +5,7 @@
             {{ user(username) }} commented on
             <a href="{{ url_for("post.main_view", post_id=p_id) }}">{{ p_title }}</a><br>
         </small>
-        {{ comment["content"] }}
+        <div class="markdown">{{ md(comment["content"])|safe }}</div>
     </div>
 {% endmacro %}
 {% block title %}overview for {{ username }}{% endblock %}
