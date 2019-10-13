@@ -11,6 +11,12 @@ a:hover {
     text-decoration: underline;
 }
 
+code {
+    border: 1px solid;
+    border-radius: 2px;
+    padding: 0 0.2em;
+}
+
 fieldset {
     max-width: max-content;
 }
