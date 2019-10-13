@@ -82,8 +82,8 @@ label {
     max-width: 50%;
 }
 
-.comments p {
-    margin: 0;
+.comment :not(br) {
+    margin: 0 0 0.2em 0;
 }
 
 .comments ul {
