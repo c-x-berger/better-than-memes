@@ -11,12 +11,31 @@ a:hover {
     text-decoration: underline;
 }
 
+code {
+    border: 1px solid;
+    border-radius: 2px;
+    padding: 0 0.2em;
+}
+
 fieldset {
     max-width: max-content;
 }
 
+pre {
+    background: whitesmoke;
+    border: 1px solid #ddd; /* that's the name you should know! */
+    border-radius: 2px;
+    padding: 5px;
+}
+
+pre code {
+    padding: unset;
+    border: unset;
+}
+
 label {
     display: block;
+    margin-bottom: 5px;
 }
 
 .topbar {
@@ -25,6 +44,7 @@ label {
     background-color: #cccccc;
     color: black;
     text-decoration: none;
+    font-size: smaller;
 }
 
 .topbar a {
@@ -33,6 +53,10 @@ label {
 
 .greeting {
     float: right;
+}
+
+.markdown :not(br) {
+    margin: 0.3em 0;
 }
 
 .main-content {
@@ -50,30 +74,38 @@ label {
 .post-content {
     border: 2px solid black;
     border-radius: 6px;
-    padding: 5px 10px;
-    max-width: 58.5em;
+    padding: 5px;
+    max-width: 50%;
 }
 
 .post-content p {
-    margin: 0 auto; /* shh */
-}
-
-.comment {
-    border: 1px solid dimgrey;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 4px 0;
-}
-
-.comment p {
     margin: 0;
 }
 
+.comments .comment {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px 0;
+}
+
 .comments {
-    max-width: 60em;
+    max-width: 50%;
+}
+
+.comment :not(br) {
+    margin: 0 0 0.2em 0;
 }
 
 .comments ul {
     padding-left: 0;
     list-style: none;
+}
+
+.post {
+    margin-top: 0.5em;
+}
+
+.post .comment {
+    margin: 0.25em 0 0 0.5em;
 }
