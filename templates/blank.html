@@ -4,7 +4,8 @@
 {% macro user(u) %}<a href="{{ url_for("user.user_overview", user=u) }}">{{ u }}</a>{% endmacro %}
 {% macro post_authorline(post) %}
     <small class="post-author">
-        posted by {{ user(post.author) }} at {{ correct_date(post.timestamp) }} to <code>{{ post.board }}</code>
+        posted by {{ user(post.author) }} at {{ correct_date(post.timestamp) }} to
+        <a href="{{ url_for("board.show_board", board=post.board) }}"><code>{{ post.board }}</code></a>
     </small>
 {% endmacro %}
 {% macro post_display(post, wrap=true) %}
