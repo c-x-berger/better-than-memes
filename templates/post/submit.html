@@ -5,15 +5,16 @@
         <fieldset>
             <legend>submit post</legend>
             <label>
-                title:<br>
-                <input name="title" required><br>
+                title<br>
+                <input name="title" required>
             </label>
             <label>
-                content:<br>
-                <textarea name="text" id="text" cols="50" rows="5"></textarea><br>
+                content<br>
+                <textarea name="text" id="text" cols="50" rows="5"></textarea>
             </label>
             <label>
-                board: <input name="board" required>
+                board<br>
+                <input name="board" required>
             </label>
             {% for message in get_flashed_messages() %}
                 {{ message|safe }}<br>

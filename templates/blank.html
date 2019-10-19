@@ -7,13 +7,18 @@
         posted by {{ user(post.author) }} at {{ correct_date(post.timestamp) }} to <code>{{ post.board }}</code>
     </small>
 {% endmacro %}
-{% macro post_display(post) %}
-    <div>
+{% macro post_display(post, wrap=true) %}
+    {% set contents %}
         <h3 class="post-title">
             <a href="{{ url_for("post.main_view", post_id=post.id) }}">{{ post.title }}</a>
         </h3>
         {{ post_authorline(post) }}
-    </div>
+    {% endset %}
+    {% if wrap %}
+        <article class="post">{{ contents }}</article>
+    {% else %}
+        {{ contents }}
+    {% endif %}
 {% endmacro %}
 <!DOCTYPE html>
 <html>
