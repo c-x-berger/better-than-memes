@@ -1,5 +1,6 @@
 from datetime import timezone
 
+import bleach
 import markdown
 import quart
 import quart.flask_patch
@@ -10,7 +11,12 @@ import postgres
 from blueprints import user, login, post, api, board
 
 app = Quart(__name__)
-app.jinja_env.globals.update(md=markdown.markdown)
+app.jinja_env.globals.update(
+    md=lambda x: bleach.clean(
+        markdown.markdown(x, extensions=config.MARKDOWN_EXTENSIONS),
+        tags=config.ALLOWED_HTML,
+    )
+)
 app.jinja_env.globals.update(
     nix_time=lambda dt: dt.replace(tzinfo=timezone.utc).timestamp()
 )
