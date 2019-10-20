@@ -64,7 +64,7 @@ async def submit_page():
         await quart.flash("bruh moment, yell at c-x-berger")
         return "bruh moment, yell at c-x-berger"
     else:
-        return quart.redirect(quart.url_for(".main_view", post_id=p.id))
+        return quart.redirect(quart.url_for("post.main_view", post_id=p.id))
 
 
 @api.blue.route("/post/<id_>/")

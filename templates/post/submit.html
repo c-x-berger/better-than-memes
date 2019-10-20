@@ -1,7 +1,7 @@
 {% extends "blank.html" %}
 {% block title %}submit post{% endblock %}
 {% block body %}
-    <form method="post" action="{{ url_for(".submit_page") }}">
+    <form method="post" action="{{ url_for("post.submit_page") }}">
         <fieldset>
             <legend>submit post</legend>
             <label>
