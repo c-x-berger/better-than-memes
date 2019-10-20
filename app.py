@@ -23,7 +23,7 @@ login.login_man.init_app(app)
 @app.route("/")
 async def front_page():
     newest = await postgres.pool.fetch(
-        "SELECT * FROM posts ORDER BY timestamp DESC LIMIT 10"
+        "SELECT * FROM posts ORDER BY timestamp DESC LIMIT 25"
     )
     return await quart.render_template("front_page.html", pageposts=newest)
 
