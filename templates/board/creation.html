@@ -1,0 +1,14 @@
+{% extends "blank.html" %}
+{% block title %}create board{% endblock %}
+{% block body %}
+    <form method="post" action="{{ url_for("board.create_board") }}">
+        <fieldset>
+            <legend>create board</legend>
+            <label>board path<br><input name="path" required></label>
+            {% for message in get_flashed_messages() %}
+                {{ message|safe }}<br>
+            {% endfor %}
+            <input type="submit" value="create board">
+        </fieldset>
+    </form>
+{% endblock %}
