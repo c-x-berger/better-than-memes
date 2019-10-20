@@ -6,3 +6,8 @@ POSTGRES_CONFIG = {
     "database": "bettermemes",
 }
 SECRET_KEY = "a very secret string"
+MARKDOWN_EXTENSIONS = [
+    "markdown.extensions.fenced_code",
+    "markdown.extensions.tables",
+    ImageExtension(),
+]

@@ -10,7 +10,9 @@ import postgres
 from blueprints import user, login, post, api, board
 
 app = Quart(__name__)
-app.jinja_env.globals.update(md=markdown.markdown)
+app.jinja_env.globals.update(
+    md=lambda x: markdown.markdown(x, extensions=config.MARKDOWN_EXTENSIONS)
+)
 app.jinja_env.globals.update(
     nix_time=lambda dt: dt.replace(tzinfo=timezone.utc).timestamp()
 )
