@@ -39,12 +39,12 @@ async def submit_page():
         title = (await request.form)["title"]
     except KeyError:
         await quart.flash("no title")
-        return "aw shit, here we go again"
+        return await quart.render_template("post/submit.html")
     try:
         board = (await request.form)["board"]
     except KeyError:
         await quart.flash("no board")
-        return "no board"
+        return await quart.render_template("post/submit.html")
     user = flask_login.current_user.id
     p = Post(user, title, board, content=contents)
     try:
@@ -58,11 +58,11 @@ async def submit_page():
             p.board,
         )
     except ForeignKeyViolationError:
-        await quart.flash("board {} does not exist".format(board))
-        return "yare yare daze (board DNE)"
+        await quart.flash("board <code>{}</code> does not exist".format(board))
+        return await quart.render_template("post/submit.html")
     except UniqueViolationError:
         await quart.flash("bruh moment, yell at c-x-berger")
-        return "bruh moment, yell at c-x-berger"
+        return await quart.render_template("post/submit.html")
     else:
         return quart.redirect(quart.url_for("post.main_view", post_id=p.id))
 
