@@ -1,5 +1,6 @@
-Quart
 asyncpg
-markdown
-flask-login
+bleach
 flask-bcrypt
+flask-login
+markdown
+Quart
