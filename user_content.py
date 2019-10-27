@@ -54,9 +54,9 @@ class Comment(UserContent):
         author: str,
         content: str,
         parent: str,
-        children=None,
+        children: List[str] = None,
         timestamp: float = time.time(),
-        id_=None,
+        id_: str = None,
     ):
         super().__init__(author, content, timestamp, id_)
         self.parent = parent
