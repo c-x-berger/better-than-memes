@@ -1,5 +1,45 @@
 {% extends "blank.html" %}
 {% block title %}{{ post["title"] }}{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script>
+        // called by form submit
+        function sendComment(event, form) {
+            event.preventDefault();
+            let data = {};
+            let fdata = new FormData(form);
+            for (let tuple of fdata.entries()) {
+                data[tuple[0]] = tuple[1];
+            }
+            data["post"] = "{{ post["id"] }}";
+            const xhr = new XMLHttpRequest();
+            xhr.open(form.method, form.action, true);
+            xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+            xhr.send(JSON.stringify(data));
+            xhr.onloadend = function () {
+                form.reset();
+                // window.location.reload();
+                displayNewComment(xhr.response);
+            };
+        }
+
+        function displayNewComment(contents) {
+            const commentsList = document.getElementById("all-comments");
+            const newComment = document.createElement("li");
+            newComment.classList.add("comment");
+            const authorTag = document.createElement("small");
+            authorTag.classList.add("comment-author");
+            // oh god so bad
+            authorTag.innerHTML = '{{ user(current_user.id) }} at ' + unix_to_pretty(Date.now() / 1000);
+            newComment.appendChild(authorTag);
+            const cont = document.createElement("div");
+            cont.classList.add("markdown");
+            cont.innerHTML = contents;
+            newComment.appendChild(cont);
+            commentsList.insertBefore(newComment, commentsList.firstChild);
+        }
+    </script>
+{% endblock %}
 {% block body %}
     <h2 class="post-title">{{ post["title"] }}</h2>
     {{ post_authorline(post) }}
@@ -8,5 +48,14 @@
             {{ md(post["content"])|safe }}
         </div>
     {% endif %}
+    <form method="post" action="{{ url_for("api.add_comment") }}" onsubmit="sendComment(event, this)">
+        <fieldset>
+            <legend>add a comment</legend>
+            <label>
+                <textarea name="content" cols="50" rows="5"></textarea>
+            </label>
+            <input type="submit" value="save">
+        </fieldset>
+    </form>
     {% include "post/comment_section.html" %}
 {% endblock %}
