@@ -1,7 +1,7 @@
 <div class="comments">
     <ul id="all-comments">
         {% for item in comments recursive %}
-            <li class="comment">
+            <li class="comment" id="{{ item["id"] }}">
                 <small class="comment-author">
                     {{ user(item["author"]) }} at {{ correct_date(item["timestamp"]) }}
                 </small>
