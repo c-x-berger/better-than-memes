@@ -3,7 +3,7 @@
 {% macro correct_date(date) %}<span class="date-unformatted">{{ nix_time(date) }}</span>{% endmacro %}
 {% macro user(u) %}<a href="{{ url_for("user.user_overview", user=u) }}">{{ u }}</a>{% endmacro %}
 {% macro post_authorline(post) %}
-    <small class="post-author">
+    <small class="authorship post-author">
         posted by {{ user(post.author) }} at {{ correct_date(post.timestamp) }} to
         <a href="{{ url_for("board.show_board", board=post.board) }}"><code>{{ post.board }}</code></a>
     </small>
@@ -26,8 +26,12 @@
 <head>
     {% block head %}
         <meta charset="utf-8">
-        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
-        <script src="{{ url_for("static", filename="util.js") }}"></script>
+        {% block styles %}
+            <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+        {% endblock %}
+        {% block scripts %}
+            <script src="{{ url_for("static", filename="util.js") }}"></script>
+        {% endblock %}
         <title>{% block title %}{% endblock %}</title>
     {% endblock %}
 </head>

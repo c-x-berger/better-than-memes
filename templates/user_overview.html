@@ -1,7 +1,7 @@
 {% extends "blank.html" %}
 {% macro comment_display(comment, p_id, p_title) %}
     <div class="comment">
-        <small class="comment-author">
+        <small class="authorship comment-author">
             {{ user(username) }} commented on
             <a href="{{ url_for("post.main_view", post_id=p_id) }}">{{ p_title }}</a><br>
         </small>
@@ -9,6 +9,10 @@
     </div>
 {% endmacro %}
 {% block title %}overview for {{ username }}{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/posts.css') }}">
+{% endblock %}
 {% block body %}
     this is the userpage for {{ username }}<br>
     {{ username }} has made {{ posts }} post(s) and {{ comments }} comment(s)

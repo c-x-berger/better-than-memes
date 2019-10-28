@@ -67,47 +67,12 @@ label {
     margin: 3px 0 0 0;
 }
 
-.post-author, .comment-author {
+.authorship {
     color: #888888;
 }
 
-.post-author code {
+.authorship code {
     border: none;
-}
-
-.post-content {
-    border: 2px solid black;
-    border-radius: 6px;
-    padding: 5px;
-    max-width: 50%;
-}
-
-.post-content p {
-    margin: 0;
-}
-
-.comments .comment {
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 5px 0;
-}
-
-.comments {
-    max-width: 50%;
-}
-
-.comment :not(br) {
-    margin: 0 0 0.2em 0;
-}
-
-.comments ul {
-    padding-left: 0;
-    list-style: none;
-}
-
-.post {
-    margin-top: 0.5em;
 }
 
 .post .comment {
