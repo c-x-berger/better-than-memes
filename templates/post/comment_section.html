@@ -2,7 +2,7 @@
     <ul id="all-comments">
         {% for item in comments recursive %}
             <li class="comment" id="{{ item["id"] }}">
-                <small class="comment-author">
+                <small class="authorship comment-author">
                     {{ user(item["author"]) }} at {{ correct_date(item["timestamp"]) }}
                 </small>
                 <div class="markdown">

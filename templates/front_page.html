@@ -1,5 +1,9 @@
 {% extends "blank.html" %}
 {% block title %}better than memes{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/posts.css') }}">
+{% endblock %}
 {% block body %}
     {% for post in pageposts %}
         {{ post_display(post) }}
