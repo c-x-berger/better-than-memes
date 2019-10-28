@@ -3,8 +3,37 @@
 {% block scripts %}
     {{ super() }}
     <script>
+        function createReplyForm(comment) {
+            const form = document.createElement("form");
+            form.method = "post";
+            form.action = "{{ url_for("api.add_comment") }}";
+            form.onsubmit = () => sendComment(event, form, comment);
+            const fieldset = document.createElement("fieldset");
+            const legend = document.createElement("legend");
+            legend.innerText = "reply";
+            fieldset.appendChild(legend);
+            const label = document.createElement("label");
+            const textarea = document.createElement("textarea");
+            textarea.name = "content";
+            textarea.cols = 50;
+            textarea.rows = 5;
+            label.appendChild(textarea);
+            fieldset.appendChild(label);
+            const submit = document.createElement("input");
+            submit.type = "submit";
+            submit.value = "save";
+            fieldset.appendChild(submit);
+            form.appendChild(fieldset);
+            return form;
+        }
+
+        function showReplyForm(event, comment) {
+            const c = document.getElementById(comment);
+            c.insertBefore(createReplyForm(comment), c.lastElementChild);
+        }
+
         // called by form submit
-        function sendComment(event, form) {
+        function sendComment(event, form, parent) {
             event.preventDefault();
             let data = {};
             let fdata = new FormData(form);
@@ -12,13 +41,15 @@
                 data[tuple[0]] = tuple[1];
             }
             data["post"] = "{{ post["id"] }}";
+            if (typeof parent != "undefined") {
+                data["parent"] = parent;
+            }
             const xhr = new XMLHttpRequest();
             xhr.open(form.method, form.action, true);
             xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
             xhr.send(JSON.stringify(data));
             xhr.onloadend = function () {
                 form.reset();
-                // window.location.reload();
                 displayNewComment(xhr.response);
             };
         }

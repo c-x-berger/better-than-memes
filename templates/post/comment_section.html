@@ -8,7 +8,11 @@
                 <div class="markdown">
                     {{ md(item["content"])|safe }}
                 </div>
-                {% if item["children"] %}
+                <small>
+                    <button class="reply-button" onclick="showReplyForm(event, '{{ item.id }}')">reply</button>
+                    <br>
+                </small>
+                {% if children_of(item) %}
                     <ul class="child-comments">
                         {{ loop(children_of(item)) }}
                     </ul>
