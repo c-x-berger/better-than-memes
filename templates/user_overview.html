@@ -1,7 +1,7 @@
 {% extends "blank.html" %}
 {% macro comment_display(comment, p_id, p_title) %}
     <div class="comment">
-        <small class="comment-author">
+        <small class="authorship comment-author">
             {{ user(username) }} commented on
             <a href="{{ url_for("post.main_view", post_id=p_id) }}">{{ p_title }}</a><br>
         </small>
