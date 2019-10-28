@@ -13,7 +13,7 @@
                     <br>
                 </small>
                 {% if children_of(item) %}
-                    <ul class="child-comments">
+                    <ul class="child-comments" id="children-of-{{ item["id"] }}">
                         {{ loop(children_of(item)) }}
                     </ul>
                 {% endif %}
