@@ -50,16 +50,21 @@
             xhr.send(JSON.stringify(data));
             xhr.onloadend = function () {
                 form.reset();
-                displayNewComment(xhr.response);
+                displayNewComment(xhr.response, parent);
             };
         }
 
-        function displayNewComment(contents) {
-            const commentsList = document.getElementById("all-comments");
+        function displayNewComment(contents, parent) {
+            let commentsList;
+            if (typeof parent == "undefined") {
+                commentsList = document.getElementById("all-comments");
+            } else {
+                commentsList = document.getElementById("children-of-" + parent);
+            }
             const newComment = document.createElement("li");
             newComment.classList.add("comment");
             const authorTag = document.createElement("small");
-            authorTag.classList.add("comment-author");
+            authorTag.classList.add("authorship", "comment-author");
             // oh god so bad
             authorTag.innerHTML = '{{ user(current_user.id) }} at ' + unix_to_pretty(Date.now() / 1000);
             newComment.appendChild(authorTag);
