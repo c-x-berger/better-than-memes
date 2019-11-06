@@ -27,9 +27,12 @@
             return form;
         }
 
-        function showReplyForm(event, comment) {
-            const c = document.getElementById(comment);
-            c.insertBefore(createReplyForm(comment), c.lastElementChild);
+        function showReplyForm(button, comment) {
+            if (!button.classList.contains("expanded")) {
+                const c = document.getElementById(comment);
+                c.insertBefore(createReplyForm(comment), c.lastElementChild);
+                button.classList.add("expanded");
+            }
         }
 
         // called by form submit
@@ -41,7 +44,7 @@
                 data[tuple[0]] = tuple[1];
             }
             data["post"] = "{{ post["id"] }}";
-            if (typeof parent != "undefined") {
+            if (!(typeof parent === "undefined")) {
                 data["parent"] = parent;
             }
             const xhr = new XMLHttpRequest();

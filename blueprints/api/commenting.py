@@ -27,7 +27,6 @@ async def add_comment():
             else:
                 # KeyError could happen here
                 post = data["post"]
-                parent = post
         except KeyError:
             return "no post could be found - give parent comment or post id", 400
         c = Comment(flask_login.current_user.id, content, parent)

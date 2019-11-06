@@ -9,7 +9,7 @@
                     {{ md(item["content"])|safe }}
                 </div>
                 <small>
-                    <button class="reply-button" onclick="showReplyForm(event, '{{ item["id"] }}')">reply</button>
+                    <button class="reply-button" onclick="showReplyForm(this, '{{ item["id"] }}')">reply</button>
                     <br>
                 </small>
                 <ul class="child-comments" id="children-of-{{ item["id"] }}">
