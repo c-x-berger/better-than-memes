@@ -77,6 +77,5 @@ async def get_whole_post(id_: str):
 
 async def comment_children(parent: dict):
     return await postgres.pool.fetch(
-        "SELECT * FROM comments WHERE parent = $1 ORDER BY timestamp DESC",
-        parent["id"],
+        "SELECT * FROM comments WHERE parent = $1 ORDER BY timestamp DESC", parent["id"]
     )
