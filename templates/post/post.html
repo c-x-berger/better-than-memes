@@ -59,7 +59,7 @@
 
         function displayNewComment(contents, parent) {
             let commentsList;
-            if (typeof parent == "undefined") {
+            if (typeof parent === "undefined") {
                 commentsList = document.getElementById("all-comments");
             } else {
                 commentsList = document.getElementById("children-of-" + parent);
