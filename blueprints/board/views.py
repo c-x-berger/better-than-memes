@@ -26,10 +26,11 @@ async def create_board():
     except KeyError:
         await quart.flash("no board given")
         return await quart.render_template("board/creation.html")
-    viable_child = (
-        await postgres.pool.fetchrow("SELECT $1 <@ ANY(SELECT path FROM boards)", path)
-    )["?column?"]
-    if viable_child:
+    # we need a != because the descendant operator sucks
+    viable_child = await postgres.pool.fetchrow(
+        "SELECT * FROM boards WHERE $1 <@ path AND $1 != path LIMIT 1", path
+    )
+    if viable_child is not None:
         await postgres.pool.execute(
             "INSERT INTO boards (path, creator) VALUES ($1, $2)",
             path,
