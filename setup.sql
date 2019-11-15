@@ -1,7 +1,8 @@
 CREATE TABLE users
 (
     username text PRIMARY KEY,
-    password text NOT NULL,
+    password text      NOT NULL,
+    joined   timestamp NOT NULL DEFAULT (now())::timestamp
 );
 
 CREATE TABLE boards

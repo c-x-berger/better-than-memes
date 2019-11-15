@@ -43,7 +43,9 @@
             hi there, {{ user(current_user.id) }} | <a href="{{ url_for("login.logout") }}">logout</a>
         </span>
     {% else %}
-        <span class="greeting"><a href="{{ url_for("login.login") }}">login</a></span>
+        <span class="greeting">
+            <a href="{{ url_for("login.login") }}">login</a> or <a href="{{ url_for("login.create_user") }}">create an account</a>
+        </span>
     {% endif %}
 </div>
 <div class="main-content">
