@@ -53,7 +53,7 @@
             xhr.send(JSON.stringify(data));
             xhr.onloadend = function () {
                 form.reset();
-                displayNewComment(xhr.response, parent);
+                displayNewComment(JSON.parse(xhr.response), parent);
             };
         }
 
@@ -73,7 +73,7 @@
             newComment.appendChild(authorTag);
             const cont = document.createElement("div");
             cont.classList.add("markdown");
-            cont.innerHTML = contents;
+            cont.innerHTML = contents["rendered"];
             newComment.appendChild(cont);
             commentsList.insertBefore(newComment, commentsList.firstChild);
         }

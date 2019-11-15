@@ -28,7 +28,13 @@ async def add_comment():
                 # KeyError could happen here
                 post = data["post"]
         except KeyError:
-            return "no post could be found - give parent comment or post id", 400
+            return (
+                {
+                    "status": "not-ok",
+                    "reason": "no post could be found - give parent comment or post id",
+                },
+                400,
+            )
         c = Comment(flask_login.current_user.id, content, parent)
         await postgres.pool.execute(
             "INSERT INTO comments(id, author, timestamp, parent, post, content) VALUES ($1, $2, $3, $4, $5, $6)",
@@ -39,16 +45,22 @@ async def add_comment():
             post,
             content,
         )
-        return bleach.clean(
-            markdown.markdown(content, extensions=config.MARKDOWN_EXTENSIONS),
-            tags=config.ALLOWED_HTML,
-        )
+        return {
+            "status": "ok",
+            "rendered": bleach.clean(
+                markdown.markdown(content, extensions=config.MARKDOWN_EXTENSIONS),
+                tags=config.ALLOWED_HTML,
+            ),
+        }
 
 
 @blue.route("/comment-html/<id_>")
 async def comment_html(id_: str):
     contents = (await postgres.get_comment(id_))["content"]
-    return bleach.clean(
-        markdown.markdown(contents, extensions=config.MARKDOWN_EXTENSIONS),
-        tags=config.ALLOWED_HTML,
-    )
+    return {
+        "status": "ok",
+        "rendered": bleach.clean(
+            markdown.markdown(contents, extensions=config.MARKDOWN_EXTENSIONS),
+            tags=config.ALLOWED_HTML,
+        ),
+    }
