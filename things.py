@@ -2,6 +2,8 @@ import abc
 import hashlib
 import json
 
+import config
+
 
 class Thing(abc.ABC):
     _id: str
@@ -10,7 +12,7 @@ class Thing(abc.ABC):
     def id(self):
         if not self._id:
             j = json.dumps(self.serialize())
-            self._id = hashlib.sha256(j.encode("utf-8")).hexdigest()[:7]
+            self._id = hashlib.sha256(j.encode("utf-8")).hexdigest()[: config.ID_LENGTH]
         return self._id
 
     @abc.abstractmethod
