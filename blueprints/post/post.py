@@ -18,7 +18,7 @@ async def main_view(post_id=None):
     if post is None:
         return "not found", 404
     comments = await postgres.pool.fetch(
-        "SELECT * FROM comments WHERE post = $1 AND parent =''", post_id
+        "SELECT * FROM comments WHERE id ~ ($1 || '.*{1}')::lquery", post_id
     )
     return await quart.render_template(
         "post/post.html", post=post, comments=comments, children_of=comment_children
@@ -77,5 +77,5 @@ async def get_whole_post(id_: str):
 
 async def comment_children(parent: dict):
     return await postgres.pool.fetch(
-        "SELECT * FROM comments WHERE parent = $1 ORDER BY timestamp DESC", parent["id"]
+        "SELECT * FROM comments WHERE id ~ ($1 || '.*{1}')::lquery ORDER BY timestamp DESC", parent["id"]
     )

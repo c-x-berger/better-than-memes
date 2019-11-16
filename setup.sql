@@ -23,7 +23,7 @@ CREATE TABLE posts
 
 CREATE TABLE comments
 (
-    id        text PRIMARY KEY,
+    id        ltree PRIMARY KEY,
     author    text      NOT NULL,
     timestamp timestamp NOT NULL,
     content   text      NOT NULL,
