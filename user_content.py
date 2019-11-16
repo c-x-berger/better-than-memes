@@ -64,6 +64,11 @@ class Comment(UserContent):
             children = []
         self.kids = children
 
+    @property
+    def id(self):
+        orig_id = super().id
+        return "{}.{}".format(self.parent, orig_id)
+
     def children(self) -> List[str]:
         return self.kids
 
