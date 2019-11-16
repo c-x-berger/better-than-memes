@@ -1,11 +1,14 @@
 import datetime
+import re
 from datetime import timezone
+from typing import Iterable
 
 import flask_login
 import quart
-from asyncpg import UniqueViolationError, ForeignKeyViolationError
+from asyncpg import UniqueViolationError, ForeignKeyViolationError, Record
 from quart import request
 
+import config
 import postgres
 from blueprints import api
 from blueprints.post import blue
@@ -18,7 +21,7 @@ async def main_view(post_id=None):
     if post is None:
         return "not found", 404
     comments = await postgres.pool.fetch(
-        "SELECT * FROM comments WHERE id ~ ($1 || '.*{1}')::lquery", post_id
+        "SELECT * FROM comments WHERE id <@ $1 ORDER BY id, timestamp DESC", post_id
     )
     return await quart.render_template(
         "post/post.html", post=post, comments=comments, children_of=comment_children
@@ -75,7 +78,14 @@ async def get_whole_post(id_: str):
     return ret
 
 
-async def comment_children(parent: dict):
-    return await postgres.pool.fetch(
-        "SELECT * FROM comments WHERE id ~ ($1 || '.*{1}')::lquery ORDER BY timestamp DESC", parent["id"]
-    )
+async def comment_children(parent: str, comments: Iterable[Record]):
+    """
+    Return any children of the given parent ID in comments. Meant for rendering comments sections recursively.
+
+    :param parent: The parent comment ID.
+    :param comments: An iterable of comment records which may or may not be children of parent.
+    :return: Any children of ID parent in comments.
+    """
+    # python converts {{ to { in format, so we need three to format into a {}
+    reg = re.escape(parent) + "\\..{{{0}}}$".format(config.ID_LENGTH)
+    return [c for c in comments if re.match(reg, c["id"])]
