@@ -36,17 +36,14 @@
         }
 
         // called by form submit
-        function sendComment(event, form, parent) {
+        function sendComment(event, form, parent = "{{ post['id'] }}") {
             event.preventDefault();
             let data = {};
             let fdata = new FormData(form);
             for (let tuple of fdata.entries()) {
                 data[tuple[0]] = tuple[1];
             }
-            data["post"] = "{{ post["id"] }}";
-            if (!(typeof parent === "undefined")) {
-                data["parent"] = parent;
-            }
+            data["parent"] = parent;
             const xhr = new XMLHttpRequest();
             xhr.open(form.method, form.action, true);
             xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
@@ -58,12 +55,7 @@
         }
 
         function displayNewComment(contents, parent) {
-            let commentsList;
-            if (typeof parent === "undefined") {
-                commentsList = document.getElementById("all-comments");
-            } else {
-                commentsList = document.getElementById("children-of-" + parent);
-            }
+            let commentsList = document.getElementById("children-of-" + parent);
             const newComment = document.createElement("li");
             newComment.classList.add("comment");
             const authorTag = document.createElement("small");

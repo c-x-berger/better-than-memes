@@ -1,5 +1,5 @@
 <div class="comments">
-    <ul id="all-comments">
+    <ul id="children-of-{{ post['id'] }}">
         {% for item in children_of(post["id"], comments) recursive %}
             <li class="comment" id="{{ item["id"] }}">
                 <small class="authorship comment-author">
