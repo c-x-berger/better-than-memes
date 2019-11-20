@@ -20,14 +20,6 @@ async def add_comment():
         try:
             parent = data["parent"]
         except KeyError:
-            parent = ""
-        try:
-            if parent != "":
-                post = (await postgres.get_comment(parent))["post"]
-            else:
-                # KeyError could happen here
-                post = data["post"]
-        except KeyError:
             return (
                 {
                     "status": "not-ok",
@@ -37,12 +29,10 @@ async def add_comment():
             )
         c = Comment(flask_login.current_user.id, content, parent)
         await postgres.pool.execute(
-            "INSERT INTO comments(id, author, timestamp, parent, post, content) VALUES ($1, $2, $3, $4, $5, $6)",
+            "INSERT INTO comments(id, author, timestamp, content) VALUES ($1, $2, $3, $4)",
             c.id,
             c.author,
             datetime.date.fromtimestamp(c.timestamp),
-            parent,
-            post,
             content,
         )
         return {
