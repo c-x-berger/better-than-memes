@@ -1,6 +1,6 @@
 <div class="comments">
-    <ul id="all-comments">
-        {% for item in comments recursive %}
+    <ul id="children-of-{{ post['id'] }}">
+        {% for item in children_of(post["id"], comments) recursive %}
             <li class="comment" id="{{ item["id"] }}">
                 <small class="authorship comment-author">
                     {{ user(item["author"]) }} at {{ correct_date(item["timestamp"]) }}
@@ -13,7 +13,7 @@
                     <br>
                 </small>
                 <ul class="child-comments" id="children-of-{{ item["id"] }}">
-                    {{ loop(children_of(item)) }}
+                    {{ loop(children_of(item["id"], comments)) }}
                 </ul>
             </li>
         {% endfor %}

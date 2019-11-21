@@ -2,6 +2,7 @@ import bleach
 
 from mdparse.images import ImageExtension
 
+ID_LENGTH = 7
 POSTGRES_CONFIG = {
     "user": "root",
     "pass": "toor",

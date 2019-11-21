@@ -1,3 +1,4 @@
+CREATE EXTENSION ltree;
 CREATE TABLE users
 (
     username text PRIMARY KEY,
@@ -23,11 +24,9 @@ CREATE TABLE posts
 
 CREATE TABLE comments
 (
-    id        text PRIMARY KEY,
+    id        ltree PRIMARY KEY,
     author    text      NOT NULL,
     timestamp timestamp NOT NULL,
-    content   text      NOT NULL,
-    parent    text,
-    children  text[],
-    post      text REFERENCES posts (id)
+    content   text      NOT NULL
 );
+CREATE INDEX comment_path_idx ON comments USING gist (id);
