@@ -11,6 +11,7 @@ CREATE TABLE boards
     path    ltree PRIMARY KEY,
     creator text REFERENCES users (username) NOT NULL
 );
+CREATE INDEX board_path_idx ON boards USING gist (path);
 
 CREATE TABLE posts
 (
