@@ -23,7 +23,7 @@ async def add_comment():
             return (
                 {
                     "status": "not-ok",
-                    "reason": "no post could be found - give parent comment or post id",
+                    "reason": "no parent supplied - give parent comment or post id",
                 },
                 400,
             )
