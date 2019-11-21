@@ -22,7 +22,7 @@ async def create_board():
         return await quart.render_template("board/creation.html")
 
     try:
-        path = (await quart.request.form)["path"]
+        path: str = (await quart.request.form)["path"].lower()
     except KeyError:
         await quart.flash("no board given")
         return await quart.render_template("board/creation.html")
