@@ -26,7 +26,9 @@ async def show_board(board: str):
             else:
                 sql_ready.append(part)
     query = ".".join(sql_ready)
-    newest = await postgres.pool.fetch("SELECT * FROM posts WHERE board ~ $1 ORDER BY timestamp DESC LIMIT 25", query)
+    newest = await postgres.pool.fetch(
+        "SELECT * FROM posts WHERE board ~ $1 ORDER BY timestamp DESC LIMIT 25", query
+    )
     return await quart.render_template(
         "board/board.html", board=board, pageposts=newest
     )
