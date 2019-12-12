@@ -1,4 +1,3 @@
-import datetime
 from datetime import timezone
 
 import flask_login
@@ -54,7 +53,7 @@ async def submit_page():
             p.title,
             p.author,
             p.content,
-            datetime.date.fromtimestamp(p.timestamp),
+            p.timestamp,
             p.board,
         )
     except ForeignKeyViolationError:

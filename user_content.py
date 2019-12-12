@@ -14,17 +14,21 @@ class UserContent(Thing, ABC):
         timestamp: datetime = datetime.utcnow(),
         id_=None,
     ):
-        self.author, self.content, self.timestamp, self._id = (
+        self.author, self.content, self._timestamp, self._id = (
             author,
             content,
             timestamp,
             id_,
         )
 
+    @property
+    def timestamp(self):
+        return self._timestamp.replace(tzinfo=timezone.utc)
+
     def serialize(self) -> dict:
         return {
             "author": self.author,
-            "timestamp": self.timestamp.replace(tzinfo=timezone.utc).timestamp(),
+            "timestamp": self.timestamp.timestamp(),
             "content": self.content,
         }
 
