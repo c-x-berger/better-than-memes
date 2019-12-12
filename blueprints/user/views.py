@@ -17,7 +17,6 @@ async def selfpage():
 @blue.route("/<user>")
 async def user_overview(user: str = None):
     content = []
-    seen_comments = []
     posts = await postgres.pool.fetch(
         "SELECT * FROM posts WHERE author = $1 ORDER BY timestamp DESC LIMIT 25", user
     )
@@ -26,17 +25,18 @@ async def user_overview(user: str = None):
         p = {"type": "post"}
         p.update(post)
         replies = await postgres.pool.fetch(
-            "SELECT id, content, timestamp FROM comments WHERE post = $1 AND author = $2 ORDER BY timestamp DESC",
+            "SELECT id, content, timestamp FROM comments WHERE id <@ $1 AND author = $2 ORDER BY timestamp DESC",
             post["id"],
             user,
         )
-        seen_comments.extend([c["id"] for c in replies])
         p["comments"] = replies
         content.append(p)
     comments = await postgres.pool.fetch(
-        "SELECT content, timestamp, post FROM comments WHERE author = $1 AND NOT id = ANY($2) ORDER BY timestamp DESC LIMIT 25",
+        "SELECT id, content, timestamp FROM comments "
+        "WHERE author = $1 AND NOT id <@ $2::ltree[] "
+        "ORDER BY timestamp DESC LIMIT 25",
         user,
-        seen_comments,
+        [p["id"] for p in posts],
     )
     comment_count = len(comments)
 
@@ -45,7 +45,7 @@ async def user_overview(user: str = None):
             "type": "comment",
             "post_title": (
                 await postgres.pool.fetchrow(
-                    "SELECT title FROM posts WHERE id = $1", comment["post"]
+                    "SELECT title FROM posts WHERE id = $1", comment["id"].split(".")[0]
                 )
             )["title"],
         }
