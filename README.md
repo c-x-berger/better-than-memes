@@ -14,7 +14,8 @@ Setup
 Why would you want to do this?
 
 You'll need to have a PostgreSQL database up and running. Edit `POSTGRES_CONFIG`
-in `config.py` to match the details to connect to your database.
+in `config.py` to match the details to connect to your database. Also, set the
+`SECRET_KEY` to [something a little more secure.](https://flask.palletsprojects.com/en/1.1.x/tutorial/deploy/#configure-the-secret-key)
 
 To create the required tables, execute `setup.sql` on your database. This will
 create tables for comments, posts, users, etc.
