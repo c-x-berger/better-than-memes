@@ -1,5 +1,5 @@
-import time
 from abc import ABC
+from datetime import datetime, timezone
 from typing import List
 
 from things import Thing
@@ -7,7 +7,11 @@ from things import Thing
 
 class UserContent(Thing, ABC):
     def __init__(
-        self, author: str, content: str, timestamp: float = time.time(), id_=None
+        self,
+        author: str,
+        content: str,
+        timestamp: datetime = datetime.utcnow(),
+        id_=None,
     ):
         self.author, self.content, self.timestamp, self._id = (
             author,
@@ -19,7 +23,7 @@ class UserContent(Thing, ABC):
     def serialize(self) -> dict:
         return {
             "author": self.author,
-            "timestamp": self.timestamp,
+            "timestamp": self.timestamp.replace(tzinfo=timezone.utc).timestamp(),
             "content": self.content,
         }
 
@@ -31,7 +35,7 @@ class Post(UserContent):
         title: str,
         board: str,
         content: str = "",
-        timestamp: float = time.time(),
+        timestamp: datetime = datetime.utcnow(),
         id_=None,
     ):
         super().__init__(author, content, timestamp, id_)
@@ -55,7 +59,7 @@ class Comment(UserContent):
         content: str,
         parent: str,
         children: List[str] = None,
-        timestamp: float = time.time(),
+        timestamp: datetime = datetime.utcnow(),
         id_: str = None,
     ):
         super().__init__(author, content, timestamp, id_)
