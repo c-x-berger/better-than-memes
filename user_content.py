@@ -79,9 +79,11 @@ class Comment(UserContent):
 
     @property
     def id(self):
-        # calculate id as this comment alone, then prepend parent
-        orig_id = super().id
-        return "{}.{}".format(self.parent, orig_id)
+        if not self._id:
+            # this call to super().id hashes, and we then assign the internal value
+            # to avoid that in the future
+            self._id = "{}.{}".format(self.parent, super().id)
+        return super().id
 
     def serialize(self) -> dict:
         values = super().serialize()
