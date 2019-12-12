@@ -18,7 +18,7 @@ class Thing(abc.ABC):
     @abc.abstractmethod
     def serialize(self) -> dict:
         """
-        Serialize this Thing as a dictionary. Should be suitable for JSON dumping.
+        Serialize this Thing as a dictionary. Should be suitable for JSON dumping. Must not contain this Thing's ID.
         Update your parent class' serialize method as opposed to overloading to avoid Boilerplate(tm).
 
         :return: This Thing, serialized to a JSON-suitable dictionary.
