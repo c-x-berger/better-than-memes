@@ -23,7 +23,7 @@ class UserContent(Thing, ABC):
 
     @property
     def timestamp(self):
-        return self._timestamp.replace(tzinfo=timezone.utc)
+        return self._timestamp.replace(tzinfo=None)
 
     def serialize(self) -> dict:
         return {
