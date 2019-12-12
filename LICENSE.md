@@ -59,7 +59,7 @@ other than You, whether those works are distributed or communicated to those
 persons or made available as an application intended for use over a network.
 As an express condition for the grants of license hereunder, You must treat
 any External Deployment by You of the Original Work or a Derivative Work as a
-distribution under section 1(c).
+distribution under section 1.3.
 
 6) Attribution Rights. You must retain, in the Source Code of any Derivative
 Works that You create, all copyright, patent, or trademark notices from the
@@ -104,7 +104,7 @@ Nothing in this License is intended to affect copyright exceptions and
 limitations (including "fair use" or "fair dealing"). This License shall
 terminate immediately and You may no longer exercise any of the rights granted
 to You by this License upon your failure to honor the conditions in Section
-1(c).
+1.3.
 
 10) Termination for Patent Action. This License shall terminate automatically
 and You may no longer exercise any of the rights granted to You by this
