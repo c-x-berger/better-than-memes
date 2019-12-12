@@ -1,6 +1,6 @@
 from abc import ABC
 from datetime import datetime, timezone
-from typing import List, Coroutine
+from typing import List
 
 import postgres
 from things import Thing
@@ -90,14 +90,21 @@ class Comment(UserContent):
         values.update({"parent": self.parent})
         return values
 
-    async def children(self) -> Coroutine[List["Comment"]]:
+    @staticmethod
+    async def children_of(id_: str) -> List["Comment"]:
+        """
+        Returns all direct children of id_
+        """
         ids = await postgres.pool.fetch(
-            "SELECT id FROM comments WHERE id <@ $1 AND id != $1", self.id
+            "SELECT id FROM comments WHERE id ~ $1", id_ + ".*{1}"
         )
         ret = []
         for row in ids:
             ret.append(await Comment.retrieve(row["id"]))
         return ret
+
+    async def children(self) -> List["Comment"]:
+        return await Comment.children_of(self.id)
 
     @staticmethod
     def deserialize(serialized: dict, orig_id: str):
