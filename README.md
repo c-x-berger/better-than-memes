@@ -2,6 +2,8 @@
 ===
 `better-than-memes` is an unholy fusion of Reddit/the idea of threaded comments
 and [Usenet's](https://en.wikipedia.org/wiki/Usenet) "board/topic hierarchy."
+Comments thread and nest, and so do the "boards." This largely comes from
+exploiting the [`ltree` PostgreSQL extension.](https://www.postgresql.org/docs/current/ltree.html)
 
 It is, in a way, the _worst_ of both worlds, being centralized like Reddit and
 obsessively "organized" like Usenet. ~~Hopefully the centralized part goes away
