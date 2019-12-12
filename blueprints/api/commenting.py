@@ -32,7 +32,7 @@ async def add_comment():
             "INSERT INTO comments(id, author, timestamp, content) VALUES ($1, $2, $3, $4)",
             c.id,
             c.author,
-            datetime.date.fromtimestamp(c.timestamp),
+            c.timestamp,
             content,
         )
         return {
