@@ -1,6 +1,6 @@
 from abc import ABC
 from datetime import datetime, timezone
-from typing import List
+from typing import List, Coroutine
 
 import postgres
 from things import Thing
@@ -71,31 +71,31 @@ class Comment(UserContent):
         author: str,
         content: str,
         parent: str,
-        children: List[str] = None,
         timestamp: datetime = datetime.utcnow(),
         id_: str = None,
     ):
         super().__init__(author, content, timestamp, id_)
         self.parent = parent
-        if children is None:
-            children = []
-        self.kids = children
 
     @property
     def id(self):
+        # calculate id as this comment alone, then prepend parent
         orig_id = super().id
         return "{}.{}".format(self.parent, orig_id)
 
-    def children(self) -> List[str]:
-        return self.kids
-
-    def add_child(self, kid: "Comment"):
-        self.kids.append(kid.id)
-
     def serialize(self) -> dict:
         values = super().serialize()
-        values.update({"children": self.children(), "parent": self.parent})
+        values.update({"parent": self.parent})
         return values
+
+    async def children(self) -> Coroutine[List["Comment"]]:
+        ids = await postgres.pool.fetch(
+            "SELECT id FROM comments WHERE id <@ $1 AND id != $1", self.id
+        )
+        ret = []
+        for row in ids:
+            ret.append(await Comment.retrieve(row["id"]))
+        return ret
 
     @staticmethod
     def deserialize(serialized: dict, orig_id: str):
