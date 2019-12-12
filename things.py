@@ -35,3 +35,12 @@ class Thing(abc.ABC):
         :return: A deserialized Thing
         """
         ...
+
+    @staticmethod
+    @abc.abstractmethod
+    async def retrieve(id_: str) -> "Thing":
+        """
+        Retrieve and return an instance of a Thing from storage by id.
+        :param id_: The ID of the Thing to retrieve
+        """
+        ...

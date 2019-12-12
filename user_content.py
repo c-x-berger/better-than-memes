@@ -2,6 +2,7 @@ from abc import ABC
 from datetime import datetime, timezone
 from typing import List
 
+import postgres
 from things import Thing
 
 
@@ -51,6 +52,18 @@ class Post(UserContent):
     def deserialize(serialized: dict, orig_id: str):
         return Post(**serialized, id_=orig_id)
 
+    @staticmethod
+    async def retrieve(id_: str) -> "Post":
+        record = await postgres.pool.fetchrow("SELECT * FROM posts WHERE id = $1", id_)
+        return Post(
+            author=record["author"],
+            title=record["title"],
+            board=record["board"],
+            timestamp=record["timestamp"],
+            content=record["content"],
+            id_=record["id"],
+        )
+
 
 class Comment(UserContent):
     def __init__(
@@ -87,3 +100,16 @@ class Comment(UserContent):
     @staticmethod
     def deserialize(serialized: dict, orig_id: str):
         return Comment(**serialized, id_=orig_id)
+
+    @staticmethod
+    async def retrieve(id_: str) -> "Comment":
+        record = await postgres.pool.fetchrow(
+            "SELECT * FROM comments WHERE id = $1", id_
+        )
+        return Comment(
+            author=record["author"],
+            content=record["content"],
+            parent=".".join(record["id"].split(".")[:-1]),
+            timestamp=record["timestamp"],
+            id_=record["id"],
+        )
