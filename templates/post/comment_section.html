@@ -1,18 +1,20 @@
 <div class="comments">
-    <ul>
-        {% for item in comments recursive %}
-            <li class="comment">
-                <small class="comment-author">
-                    {{ user(item["author"]) }} at {{ correct_date(item["timestamp"]) }}
+    <ul id="children-of-{{ post['id'] }}">
+        {% for item in children_of(post["id"]) recursive %}
+            <li class="comment" id="{{ item.id }}">
+                <small class="authorship comment-author">
+                    {{ user(item.author) }} at {{ correct_date(item.timestamp) }}
                 </small>
                 <div class="markdown">
                     {{ md(item["content"])|safe }}
                 </div>
-                {% if item["children"] %}
-                    <ul class="child-comments">
-                        {{ loop(children_of(item)) }}
-                    </ul>
-                {% endif %}
+                <small>
+                    <button class="reply-button" onclick="showReplyForm(this, '{{ item.id }}')">reply</button>
+                    <br>
+                </small>
+                <ul class="child-comments" id="children-of-{{ item["id"] }}">
+                    {{ loop(item.children()) }}
+                </ul>
             </li>
         {% endfor %}
     </ul>

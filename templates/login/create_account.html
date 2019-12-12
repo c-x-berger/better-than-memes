@@ -1,20 +1,22 @@
 {% extends "blank.html" %}
-{% block title %}log in{% endblock %}
+{% block title %}create account{% endblock %}
 {% block body %}
-    <form method="post" action="{{ url_for(".login") }}">
+    <form method="post" action="{{ url_for("login.create_user") }}">
         <fieldset>
-            <legend>login</legend>
+            <legend>create account</legend>
             <label>
                 username: <input name="username" required>
             </label>
             <label>
                 password: <input name="password" type="password" required>
             </label>
-            <input type="submit" value="log in">
+            <label>
+                confirm password: <input name="pass_verify" type="password" required>
+            </label>
+            <input type="submit" value="create account">
             {% for message in get_flashed_messages() %}
                 {{ message|safe }}<br>
             {% endfor %}
         </fieldset>
     </form>
-    <p>(or <a href="{{ url_for("login.create_user") }}">create an account</a>)</p>
 {% endblock %}

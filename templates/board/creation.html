@@ -4,7 +4,7 @@
     <form method="post" action="{{ url_for("board.create_board") }}">
         <fieldset>
             <legend>create board</legend>
-            <label>board path<br><input name="path" required></label>
+            <label>board path<br><input name="path" pattern="^([\w]+\.\w+)+$|^\w+$" required></label>
             {% for message in get_flashed_messages() %}
                 {{ message|safe }}<br>
             {% endfor %}

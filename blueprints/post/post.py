@@ -9,7 +9,7 @@ from quart import request
 import postgres
 from blueprints import api
 from blueprints.post import blue
-from user_content import Post
+from user_content import Post, Comment
 
 
 @blue.route("/<post_id>")
@@ -18,10 +18,10 @@ async def main_view(post_id=None):
     if post is None:
         return "not found", 404
     comments = await postgres.pool.fetch(
-        "SELECT * FROM comments WHERE parent = $1", post_id
+        "SELECT * FROM comments WHERE id <@ $1 ORDER BY id, timestamp DESC", post_id
     )
     return await quart.render_template(
-        "post/post.html", post=post, comments=comments, children_of=comment_children
+        "post/post.html", post=post, comments=comments, children_of=Comment.children_of
     )
 
 
@@ -39,12 +39,12 @@ async def submit_page():
         title = (await request.form)["title"]
     except KeyError:
         await quart.flash("no title")
-        return "aw shit, here we go again"
+        return await quart.render_template("post/submit.html")
     try:
         board = (await request.form)["board"]
     except KeyError:
         await quart.flash("no board")
-        return "no board"
+        return await quart.render_template("post/submit.html")
     user = flask_login.current_user.id
     p = Post(user, title, board, content=contents)
     try:
@@ -58,13 +58,13 @@ async def submit_page():
             p.board,
         )
     except ForeignKeyViolationError:
-        await quart.flash("board {} does not exist".format(board))
-        return "yare yare daze (board DNE)"
+        await quart.flash("board <code>{}</code> does not exist".format(board))
+        return await quart.render_template("post/submit.html")
     except UniqueViolationError:
         await quart.flash("bruh moment, yell at c-x-berger")
-        return "bruh moment, yell at c-x-berger"
+        return await quart.render_template("post/submit.html")
     else:
-        return quart.redirect(quart.url_for(".main_view", post_id=p.id))
+        return quart.redirect(quart.url_for("post.main_view", post_id=p.id))
 
 
 @api.blue.route("/post/<id_>/")
@@ -73,10 +73,3 @@ async def get_whole_post(id_: str):
     ret = {k: v for k, v in post.items()}
     ret["timestamp"] = ret["timestamp"].replace(tzinfo=timezone.utc).timestamp()
     return ret
-
-
-async def comment_children(parent: dict):
-    return await postgres.pool.fetch(
-        "SELECT * FROM comments WHERE id = ANY ($1) ORDER BY timestamp DESC",
-        parent["children"],
-    )

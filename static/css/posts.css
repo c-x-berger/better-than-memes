@@ -1,0 +1,18 @@
+.post-title {
+    margin: 3px 0 0 0;
+}
+
+.post-content {
+    border: 2px solid black;
+    border-radius: 6px;
+    padding: 5px;
+    max-width: 50%;
+}
+
+.post-content p {
+    margin: 0;
+}
+
+.post {
+    margin-top: 0.5em;
+}
