@@ -18,7 +18,7 @@ class Thing(abc.ABC):
     @abc.abstractmethod
     def serialize(self) -> dict:
         """
-        Serialize this Thing as a dictionary. Should be suitable for JSON dumping.
+        Serialize this Thing as a dictionary. Should be suitable for JSON dumping. Must not contain this Thing's ID.
         Update your parent class' serialize method as opposed to overloading to avoid Boilerplate(tm).
 
         :return: This Thing, serialized to a JSON-suitable dictionary.
@@ -33,5 +33,14 @@ class Thing(abc.ABC):
         :param original_id: The Thing's ID, as calculated prior to any editing
         :param serialized: The serialized Thing
         :return: A deserialized Thing
+        """
+        ...
+
+    @staticmethod
+    @abc.abstractmethod
+    async def retrieve(id_: str) -> "Thing":
+        """
+        Retrieve and return an instance of a Thing from storage by id.
+        :param id_: The ID of the Thing to retrieve
         """
         ...

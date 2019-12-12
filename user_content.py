@@ -1,13 +1,18 @@
-import time
 from abc import ABC
+from datetime import datetime, timezone
 from typing import List
 
+import postgres
 from things import Thing
 
 
 class UserContent(Thing, ABC):
     def __init__(
-        self, author: str, content: str, timestamp: float = time.time(), id_=None
+        self,
+        author: str,
+        content: str,
+        timestamp: datetime = datetime.utcnow(),
+        id_=None,
     ):
         self.author, self.content, self.timestamp, self._id = (
             author,
@@ -19,7 +24,7 @@ class UserContent(Thing, ABC):
     def serialize(self) -> dict:
         return {
             "author": self.author,
-            "timestamp": self.timestamp,
+            "timestamp": self.timestamp.replace(tzinfo=timezone.utc).timestamp(),
             "content": self.content,
         }
 
@@ -31,7 +36,7 @@ class Post(UserContent):
         title: str,
         board: str,
         content: str = "",
-        timestamp: float = time.time(),
+        timestamp: datetime = datetime.utcnow(),
         id_=None,
     ):
         super().__init__(author, content, timestamp, id_)
@@ -47,6 +52,18 @@ class Post(UserContent):
     def deserialize(serialized: dict, orig_id: str):
         return Post(**serialized, id_=orig_id)
 
+    @staticmethod
+    async def retrieve(id_: str) -> "Post":
+        record = await postgres.pool.fetchrow("SELECT * FROM posts WHERE id = $1", id_)
+        return Post(
+            author=record["author"],
+            title=record["title"],
+            board=record["board"],
+            timestamp=record["timestamp"],
+            content=record["content"],
+            id_=record["id"],
+        )
+
 
 class Comment(UserContent):
     def __init__(
@@ -54,32 +71,54 @@ class Comment(UserContent):
         author: str,
         content: str,
         parent: str,
-        children: List[str] = None,
-        timestamp: float = time.time(),
+        timestamp: datetime = datetime.utcnow(),
         id_: str = None,
     ):
         super().__init__(author, content, timestamp, id_)
         self.parent = parent
-        if children is None:
-            children = []
-        self.kids = children
 
     @property
     def id(self):
-        orig_id = super().id
-        return "{}.{}".format(self.parent, orig_id)
-
-    def children(self) -> List[str]:
-        return self.kids
-
-    def add_child(self, kid: "Comment"):
-        self.kids.append(kid.id)
+        if not self._id:
+            # this call to super().id hashes, and we then assign the internal value
+            # to avoid that in the future
+            self._id = "{}.{}".format(self.parent, super().id)
+        return super().id
 
     def serialize(self) -> dict:
         values = super().serialize()
-        values.update({"children": self.children(), "parent": self.parent})
+        values.update({"parent": self.parent})
         return values
+
+    @staticmethod
+    async def children_of(id_: str) -> List["Comment"]:
+        """
+        Returns all direct children of id_
+        """
+        ids = await postgres.pool.fetch(
+            "SELECT id FROM comments WHERE id ~ $1", id_ + ".*{1}"
+        )
+        ret = []
+        for row in ids:
+            ret.append(await Comment.retrieve(row["id"]))
+        return ret
+
+    async def children(self) -> List["Comment"]:
+        return await Comment.children_of(self.id)
 
     @staticmethod
     def deserialize(serialized: dict, orig_id: str):
         return Comment(**serialized, id_=orig_id)
+
+    @staticmethod
+    async def retrieve(id_: str) -> "Comment":
+        record = await postgres.pool.fetchrow(
+            "SELECT * FROM comments WHERE id = $1", id_
+        )
+        return Comment(
+            author=record["author"],
+            content=record["content"],
+            parent=".".join(record["id"].split(".")[:-1]),
+            timestamp=record["timestamp"],
+            id_=record["id"],
+        )
