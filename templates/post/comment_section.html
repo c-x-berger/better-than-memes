@@ -9,8 +9,10 @@
                     {{ md(item["content"])|safe }}
                 </div>
                 <small>
-                    <button class="reply-button" onclick="showReplyForm(this, '{{ item.id }}')">reply</button>
-                    <br>
+                    {% if current_user.is_authenticated %}
+                        <button class="reply-button" onclick="showReplyForm(this, '{{ item.id }}')">reply</button>
+                        <br>
+                    {% endif %}
                 </small>
                 <ul class="child-comments" id="children-of-{{ item["id"] }}">
                     {{ loop(item.children()) }}

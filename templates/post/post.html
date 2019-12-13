@@ -87,10 +87,17 @@
     <form method="post" action="{{ url_for("api.add_comment") }}" onsubmit="sendComment(event, this)">
         <fieldset>
             <legend>add a comment</legend>
-            <label>
-                <textarea name="content" cols="50" rows="5"></textarea>
-            </label>
-            <input type="submit" value="save">
+            {% if current_user.is_authenticated %}
+                <label>
+                    <textarea name="content" cols="50" rows="5" placeholder="..."></textarea>
+                </label>
+                <input type="submit" value="save">
+            {% else %}
+                <label>
+                    <textarea name="content" cols="50" rows="5"
+                              readonly>sorry, you must be logged in to comment</textarea>
+                </label>
+            {% endif %}
         </fieldset>
     </form>
     {% include "post/comment_section.html" %}
