@@ -7,5 +7,5 @@ DEL_RE = r"(~~)(.*?)~~"
 
 class StrikeoutExtension(Extension):
     def extendMarkdown(self, md: Markdown):
-        del_tag = SimpleTagPattern(DEL_RE, 'del')
-        md.inlinePatterns.add('del', del_tag, ">not_strong")
+        del_tag = SimpleTagPattern(DEL_RE, "del")
+        md.inlinePatterns.add("del", del_tag, ">not_strong")
