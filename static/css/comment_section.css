@@ -18,6 +18,11 @@
     list-style: none;
 }
 
+.markdown ul {
+    list-style: revert;
+    padding-left: revert;
+}
+
 .reply-button {
     background: none;
     border: none;

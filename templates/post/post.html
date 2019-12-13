@@ -36,7 +36,7 @@
         }
 
         // called by form submit
-        function sendComment(event, form, parent = "{{ post['id'] }}") {
+        function sendComment(event, form, parent = "{{ post['id'] }}", hideform = true) {
             event.preventDefault();
             let data = {};
             let fdata = new FormData(form);
@@ -49,7 +49,10 @@
             xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
             xhr.send(JSON.stringify(data));
             xhr.onloadend = function () {
-                form.remove();
+                form.reset();
+                if (hideform) {
+                    form.remove();
+                }
                 displayNewComment(JSON.parse(xhr.response), parent);
             };
         }
@@ -84,13 +87,21 @@
             {{ md(post["content"])|safe }}
         </div>
     {% endif %}
-    <form method="post" action="{{ url_for("api.add_comment") }}" onsubmit="sendComment(event, this)">
+    <form method="post" action="{{ url_for("api.add_comment") }}"
+          onsubmit="sendComment(event, this, '{{ post['id'] }}', false)">
         <fieldset>
             <legend>add a comment</legend>
-            <label>
-                <textarea name="content" cols="50" rows="5"></textarea>
-            </label>
-            <input type="submit" value="save">
+            {% if current_user.is_authenticated %}
+                <label>
+                    <textarea name="content" cols="50" rows="5" placeholder="..."></textarea>
+                </label>
+                <input type="submit" value="save">
+            {% else %}
+                <label>
+                    <textarea name="content" cols="50" rows="5"
+                              readonly>sorry, you must be logged in to comment</textarea>
+                </label>
+            {% endif %}
         </fieldset>
     </form>
     {% include "post/comment_section.html" %}
