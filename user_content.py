@@ -1,5 +1,5 @@
 from abc import ABC
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import List
 
 import postgres
@@ -8,16 +8,12 @@ from things import Thing
 
 class UserContent(Thing, ABC):
     def __init__(
-        self,
-        author: str,
-        content: str,
-        timestamp: datetime = datetime.utcnow(),
-        id_=None,
+        self, author: str, content: str, timestamp: datetime = None, id_=None,
     ):
         self.author, self.content, self._timestamp, self._id = (
             author,
             content,
-            timestamp,
+            timestamp if timestamp is not None else datetime.utcnow(),
             id_,
         )
 
@@ -40,7 +36,7 @@ class Post(UserContent):
         title: str,
         board: str,
         content: str = "",
-        timestamp: datetime = datetime.utcnow(),
+        timestamp: datetime = None,
         id_=None,
     ):
         super().__init__(author, content, timestamp, id_)
@@ -75,7 +71,7 @@ class Comment(UserContent):
         author: str,
         content: str,
         parent: str,
-        timestamp: datetime = datetime.utcnow(),
+        timestamp: datetime = None,
         id_: str = None,
     ):
         super().__init__(author, content, timestamp, id_)
