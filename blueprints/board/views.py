@@ -47,13 +47,16 @@ async def create_board():
         await quart.flash("no board given")
         return await quart.render_template("board/creation.html")
     # we need a != because the descendant operator sucks
-    viable_child = await postgres.pool.fetchrow(
-        "SELECT * FROM boards WHERE $1 <@ path AND $1 != path LIMIT 1", path
+    viable_child = await postgres.pool.fetchval(
+        "SELECT EXISTS(SELECT FROM boards WHERE path ~ ($1 || '.*{1}')::lquery)", path
     )
-    if viable_child is not None:
+    if viable_child:
         await postgres.pool.execute(
             "INSERT INTO boards (path, creator) VALUES ($1, $2)",
             path,
             flask_login.current_user.id,
         )
         return quart.redirect(quart.url_for("board.show_board", board=path))
+    else:
+        await quart.flash("{} is not a child of any existing board".format(path))
+        return await quart.render_template("board/creation.html")
