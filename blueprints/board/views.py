@@ -49,7 +49,7 @@ async def create_board():
         return await quart.render_template("board/creation.html")
     # we need a != because the descendant operator sucks
     viable_child = await postgres.pool.fetchval(
-        "SELECT EXISTS(SELECT FROM boards WHERE path ~ ($1 || '.*{1}')::lquery)", path
+        "SELECT EXISTS(SELECT FROM boards WHERE path = $1)", path.split(".")[:-1]
     )
     if viable_child:
         await postgres.pool.execute(
