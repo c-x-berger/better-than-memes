@@ -1,7 +1,7 @@
 <div class="comments">
-    <ul id="children-of-{{ post['id'] }}">
+    <section id="children-of-{{ post['id'] }}">
         {% for item in children_of(post["id"]) recursive %}
-            <li class="comment" id="{{ item.id }}">
+            <section class="comment" id="{{ item.id }}">
                 <small class="authorship comment-author">
                     {{ user(item.author) }} at {{ correct_date(item.timestamp) }}
                 </small>
@@ -14,10 +14,10 @@
                         <br>
                     {% endif %}
                 </small>
-                <ul class="child-comments" id="children-of-{{ item["id"] }}">
+                <section class="child-comments" id="children-of-{{ item["id"] }}">
                     {{ loop(item.children()) }}
-                </ul>
-            </li>
+                </section>
+            </section>
         {% endfor %}
-    </ul>
+    </section>
 </div>
