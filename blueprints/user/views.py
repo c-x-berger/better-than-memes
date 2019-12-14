@@ -48,6 +48,7 @@ async def user_overview(user: str = None):
                     "SELECT title FROM posts WHERE id = $1", comment["id"].split(".")[0]
                 )
             )["title"],
+            "post": comment["id"].split(".")[0],
         }
         c.update(comment)
         content.append(c)
