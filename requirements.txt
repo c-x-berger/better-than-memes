@@ -3,4 +3,4 @@ bleach
 flask-bcrypt
 flask-login
 markdown
-Quart
+Quart>=0.10.0
