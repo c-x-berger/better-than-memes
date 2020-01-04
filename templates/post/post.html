@@ -60,7 +60,7 @@
 
         function displayNewComment(contents, parent) {
             let commentsList = document.getElementById("children-of-" + parent);
-            const newComment = document.createElement("li");
+            const newComment = document.createElement("section");
             newComment.classList.add("comment");
             const authorTag = document.createElement("small");
             authorTag.classList.add("authorship", "comment-author");
