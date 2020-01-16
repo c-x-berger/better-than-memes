@@ -1,9 +1,7 @@
-import datetime
-
 import bleach
 import flask_login
 import markdown
-import quart
+from quart import request
 
 import config
 import postgres
@@ -14,7 +12,14 @@ from user_content import Comment
 @blue.route("/add-comment", ["POST"])
 @flask_login.login_required
 async def add_comment():
-    data = await quart.request.json
+    """
+    Add a comment. HTTP JSON API.
+    Parameters:
+    - content (str): Markdown string of content
+    - parent (id): ID of Thing being replied to
+    :return: JSON with status and possibly the HTML render of content
+    """
+    data = await request.get_json()
     if data is not None:
         content = data["content"]
         try:
@@ -42,6 +47,8 @@ async def add_comment():
                 tags=config.ALLOWED_HTML,
             ),
         }
+    else:
+        return {"status": "not-ok", "reason": "send JSON next time you fool"}, 400
 
 
 @blue.route("/comment-html/<id_>")
