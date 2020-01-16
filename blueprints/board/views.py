@@ -3,6 +3,7 @@ import flask_login
 import quart
 
 import postgres
+from util import path
 from . import blue
 
 
@@ -43,21 +44,25 @@ async def create_board():
         return await quart.render_template("board/creation.html")
 
     try:
-        path: str = bleach.clean((await quart.request.form)["path"].lower())
+        path_: str = bleach.clean((await quart.request.form)["path"].lower())
     except KeyError:
         await quart.flash("no board given")
         return await quart.render_template("board/creation.html")
     # we need a != because the descendant operator sucks
     viable_child = await postgres.pool.fetchval(
-        "SELECT EXISTS(SELECT FROM boards WHERE path = $1)", path.split(".")[:-1]
+        "SELECT EXISTS(SELECT FROM boards WHERE path = $1)", path_.split(".")[:-1]
     )
+    viable_child = viable_child and path.is_valid(path_)
     if viable_child:
         await postgres.pool.execute(
             "INSERT INTO boards (path, creator) VALUES ($1, $2)",
-            path,
+            path_,
             flask_login.current_user.id,
         )
-        return quart.redirect(quart.url_for("board.show_board", board=path))
+        return quart.redirect(quart.url_for("board.show_board", board=path_))
     else:
-        await quart.flash("{} is not a child of any existing board".format(path))
+        if path.is_valid(path_):
+            await quart.flash("{} is not a valid board path (check for illegal chars)".format(path_))
+        else:
+            await quart.flash("{} is not a child of any existing board".format(path_))
         return await quart.render_template("board/creation.html")
