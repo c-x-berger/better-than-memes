@@ -68,3 +68,25 @@ async def create_board():
         else:
             await quart.flash("{} is not a child of any existing board".format(path_))
         return await quart.render_template("board/creation.html")
+
+
+@blue.route("/list")
+async def board_list():
+    boards_rec = await postgres.pool.fetch(
+        "SELECT path FROM boards WHERE path ~ '*{1}'"
+    )
+    boards = [b["path"] for b in boards_rec]
+    return await quart.render_template(
+        "board/list.html",
+        boards=boards,
+        children_of=child_boards,
+    )
+
+
+async def child_boards(board: str):
+    return [
+        b["path"]
+        for b in await postgres.pool.fetch(
+            "SELECT path FROM boards WHERE path ~ ($1 || '.*{1}')::lquery and path != text2ltree($1)", board
+        )
+    ]
