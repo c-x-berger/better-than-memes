@@ -62,7 +62,9 @@ async def create_board():
         return quart.redirect(quart.url_for("board.show_board", board=path_))
     else:
         if path.is_valid(path_):
-            await quart.flash("{} is not a valid board path (check for illegal chars)".format(path_))
+            await quart.flash(
+                "{} is not a valid board path (check for illegal chars)".format(path_)
+            )
         else:
             await quart.flash("{} is not a child of any existing board".format(path_))
         return await quart.render_template("board/creation.html")
