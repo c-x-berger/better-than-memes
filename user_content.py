@@ -2,8 +2,11 @@ from abc import ABC
 from datetime import datetime
 from typing import List
 
+from asyncpg import Record
+
 import postgres
 from things import Thing
+from util import path
 
 
 class UserContent(Thing, ABC):
@@ -96,11 +99,11 @@ class Comment(UserContent):
         Returns all direct children of id_
         """
         ids = await postgres.pool.fetch(
-            "SELECT id FROM comments WHERE id ~ $1", id_ + ".*{1}"
+            "SELECT * FROM comments WHERE id ~ $1", id_ + ".*{1}"
         )
         ret = []
         for row in ids:
-            ret.append(await Comment.retrieve(row["id"]))
+            ret.append(Comment.from_record(row))
         return ret
 
     async def children(self) -> List["Comment"]:
@@ -111,14 +114,18 @@ class Comment(UserContent):
         return Comment(**serialized, id_=orig_id)
 
     @staticmethod
+    def from_record(record) -> "Comment":
+        return Comment(
+            author=record["author"],
+            content=record["content"],
+            parent=path.parent_of(record["id"]),
+            timestamp=record["timestamp"],
+            id_=record["id"],
+        )
+
+    @staticmethod
     async def retrieve(id_: str) -> "Comment":
         record = await postgres.pool.fetchrow(
             "SELECT * FROM comments WHERE id = $1", id_
         )
-        return Comment(
-            author=record["author"],
-            content=record["content"],
-            parent=".".join(record["id"].split(".")[:-1]),
-            timestamp=record["timestamp"],
-            id_=record["id"],
-        )
+        return Comment.from_record(record)

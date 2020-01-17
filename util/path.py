@@ -18,3 +18,7 @@ def children_of(path: str, paths: Set[str]) -> Set[str]:
         if is_child(path, pa):
             ret.add(pa)
     return ret
+
+
+def parent_of(path: str) -> str:
+    return ".".join(path.split(".")[:-1])
