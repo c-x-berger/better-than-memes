@@ -1,0 +1,21 @@
+{% extends "blank.html" %}
+{% block title %}board list{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <style type="text/css">
+        .board-entry {
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 5px 0;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    {% for board in boards recursive %}
+        <div class="board-entry" id="{{ board }}">
+            <a href="{{ url_for("board.show_board", board=board) }}">{{ board }}</a>
+            {{ loop(children_of(board)) }}
+        </div>
+    {% endfor %}
+{% endblock %}
